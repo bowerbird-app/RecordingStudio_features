@@ -5,13 +5,8 @@
     variant: :h1
   ) %>
 
-  <%= form_with url: admin_feature_path(@feature_recording), method: :patch, class: "flex w-full flex-col gap-6" do %>
+  <%= form_with url: admin_feature_path(@feature_recording), method: :patch, id: "feature-form", class: "flex w-full flex-col gap-6" do %>
     <%= render "form", title: @title, subtitle: @subtitle, description: @description %>
-    <%= render FlatPack::Button::Component.new(
-      text: "Save",
-      style: :primary,
-      type: "submit"
-    ) %>
   <% end %>
 
   <div class="flex flex-col gap-3">
@@ -29,4 +24,12 @@
     <% preview = attachment_preview_url(@feature_recording) %>
     <%= image_tag preview, alt: @feature.title if preview %>
   </div>
+
+  <%= render FlatPack::Button::Component.new(
+    text: "Update",
+    style: :primary,
+    type: "submit",
+    form: "feature-form",
+    class: "w-fit"
+  ) %>
 </div>

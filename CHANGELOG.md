@@ -6,7 +6,7 @@ First release. A descriptive catalogue of product features.
 
 Each feature is an immutable recordable snapshot with a required title, an optional subtitle, and an optional rich-text description. `created_at` is the only timestamp. Features hang under `root_types`, which defaults to `["AdminRoot"]`. One image is an Attachable attachment. The newest direct attachment is the image shown on the feature.
 
-Admin adds a Features section and the `recording_studio_features` screen, plus new, show, edit, and destroy routes on this engine. The public API registers the same snapshot. A host can register those serializer constants again on a named API.
+Admin adds a Features section and the `recording_studio_features` screen, plus new, show, edit, and destroy routes on this engine. The edit page shows the image above Update. The public API registers the same snapshot. A host can register those serializer constants again on a named API.
 
 Destroying a feature recording also destroys direct image attachment children, then the feature recording. The snapshot row stays.
 

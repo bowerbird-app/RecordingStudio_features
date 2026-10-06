@@ -154,7 +154,9 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     recording = RecordingStudio::Recording.where(recordable_type: "RecordingStudioFeatures::Feature").order(:created_at).last
     get "/recording_studio_features/admin/features/#{recording.id}/edit"
     assert_response :success
-    assert_includes response.body, "Image"
+    assert_includes response.body, 'id="feature-form"'
+    assert_includes response.body, 'form="feature-form"'
+    assert_operator response.body.index(">Image<"), :<, response.body.index(">Update<")
 
     patch "/recording_studio_features/admin/features/#{recording.id}", params: {
       feature: { title: "Created feature", subtitle: "Revised subtitle", description: "A description" }
