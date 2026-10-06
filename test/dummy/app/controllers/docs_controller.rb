@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 class DocsController < ApplicationController
+  CONTENT_TREE_EXCLUDED_TYPES = %w[
+    RecordingStudio::Access
+    RecordingStudio::AccessBoundary
+  ].freeze
+
   def install
   end
 
@@ -17,7 +22,11 @@ class DocsController < ApplicationController
   end
 
   def recordings_tree
-    recordings = RecordingStudio::Recording.includes(:recordable).reorder(:created_at, :id).to_a
+    recordings = RecordingStudio::Recording
+      .includes(:recordable)
+      .where.not(recordable_type: CONTENT_TREE_EXCLUDED_TYPES)
+      .reorder(:created_at, :id)
+      .to_a
     recordings_by_parent_id = recordings.group_by(&:parent_recording_id)
 
     @recording_tree = recordings_by_parent_id.fetch(nil, []).map do |recording|
@@ -26,9 +35,9 @@ class DocsController < ApplicationController
   end
 
   def gem_views
-    prefix = "#{GemTemplate::Engine.root}/"
+    prefix = "#{RecordingStudioFeatures::Engine.root}/"
 
-    @engine_views = Dir.glob(GemTemplate::Engine.root.join("app/views/gem_template/**/*.erb").to_s)
+    @engine_views = Dir.glob(RecordingStudioFeatures::Engine.root.join("app/views/recording_studio_features/**/*.erb").to_s)
       .sort
       .map { |path| path.delete_prefix(prefix) }
   end

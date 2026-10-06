@@ -1,0 +1,16 @@
+<div class="mx-auto flex w-full flex-col gap-6">
+  <%= render FlatPack::PageTitle::Component.new(
+    title: "New feature",
+    subtitle: "Add a title, and a subtitle or description if you want them.",
+    variant: :h1
+  ) %>
+
+  <%= form_with url: admin_features_path, method: :post, class: "flex w-full flex-col gap-6" do %>
+    <%= render "form", title: @title, subtitle: @subtitle, description: @description %>
+    <%= render FlatPack::Button::Component.new(
+      text: "Save",
+      style: :primary,
+      type: "submit"
+    ) %>
+  <% end %>
+</div>
