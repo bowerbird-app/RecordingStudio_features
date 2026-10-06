@@ -1,0 +1,32 @@
+<div class="mx-auto flex w-full flex-col gap-6">
+  <%= render FlatPack::PageTitle::Component.new(
+    title: "Edit feature",
+    subtitle: @feature.title,
+    variant: :h1
+  ) %>
+
+  <%= form_with url: admin_feature_path(@feature_recording), method: :patch, class: "flex w-full flex-col gap-6" do %>
+    <%= render "form", title: @title, subtitle: @subtitle, description: @description %>
+    <%= render FlatPack::Button::Component.new(
+      text: "Save",
+      style: :primary,
+      type: "submit"
+    ) %>
+  <% end %>
+
+  <div class="flex flex-col gap-3">
+    <p class="text-sm font-medium">Image</p>
+    <%= render_attachment_file_button(@feature_recording, return_to: request.original_fullpath, target: nil) %>
+    <% if @attachment_recording %>
+      <%= form_with url: destroy_attachment_path(@attachment_recording), method: :delete, class: "inline-flex" do %>
+        <%= render FlatPack::Button::Component.new(
+          text: "Remove image",
+          style: :secondary,
+          type: "submit"
+        ) %>
+      <% end %>
+    <% end %>
+    <% preview = attachment_preview_url(@feature_recording) %>
+    <%= image_tag preview, alt: @feature.title if preview %>
+  </div>
+</div>

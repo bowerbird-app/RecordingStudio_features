@@ -29,6 +29,21 @@ private_workspace = Workspace.find_or_create_by!(name: "Private Workspace")
 folder = Folder.find_or_create_by!(name: "Product Docs")
 page = Page.find_or_create_by!(title: "Getting Started")
 
+ensure_owner = lambda do |actor, recording|
+  next if RecordingStudioAccessible.authorized?(actor: actor, recording: recording, role: :admin)
+
+  result = RecordingStudioAccessible.bootstrap_owner_access!(recording: recording, actor: actor)
+  raise result.error if result.failure?
+end
+
+find_feature = lambda do |parent, title|
+  RecordingStudio::Recording.where(
+    parent_recording_id: parent.id,
+    recordable_type: "RecordingStudioFeatures::Feature",
+    trashed_at: nil
+  ).includes(:recordable).find { |recording| recording.recordable&.title == title }
+end
+
 previous_actor = Current.actor
 Current.actor = user
 
@@ -41,6 +56,36 @@ begin
   folder_recording = find_or_record_child.call(folder, root_recording, root_recording)
 
   find_or_record_child.call(page, root_recording, folder_recording)
+
+  admin_root = AdminRoot.find_or_create_by!(name: "Admin")
+  admin_root_recording = RecordingStudio.root_recording_for(admin_root)
+  ensure_owner.call(user, admin_root_recording)
+
+  catalogue = find_feature.call(admin_root_recording, "Catalogue")
+  catalogue ||= admin_root_recording.record(RecordingStudioFeatures::Feature, actor: user) do |feature|
+    feature.assign_attributes(
+      title: "Catalogue",
+      subtitle: "A list of what the product does",
+      description: "Features describe the product."
+    )
+  end
+
+  spotlight = find_feature.call(admin_root_recording, "Spotlight")
+  spotlight ||= admin_root_recording.record(RecordingStudioFeatures::Feature, actor: user) do |feature|
+    feature.assign_attributes(title: "Spotlight", subtitle: "Shown with an image")
+  end
+
+  unless RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(spotlight)
+    File.open(Rails.root.join("db/seeds/feature.png"), "rb") do |io|
+      spotlight.import_attachment(
+        io: io,
+        filename: "feature.png",
+        content_type: "image/png",
+        actor: user,
+        identify: false
+      )
+    end
+  end
 ensure
   Current.actor = previous_actor
 end
@@ -50,3 +95,4 @@ puts "Seeded: Workspace '#{workspace.name}' with root recording ##{root_recordin
 puts "Seeded: Workspace '#{accessible_workspace.name}' with root recording ##{accessible_root_recording.id}"
 puts "Seeded: Workspace '#{private_workspace.name}' with root recording ##{private_root_recording.id}"
 puts "Seeded: Folder '#{folder.name}' and page '#{page.title}'"
+puts "Seeded: Admin root '#{admin_root.name}' with features Catalogue and Spotlight"

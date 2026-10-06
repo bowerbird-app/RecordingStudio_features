@@ -1,0 +1,17 @@
+<%= render FlatPack::TextInput::Component.new(
+  name: "feature[title]",
+  value: title,
+  label: "Title",
+  required: true
+) %>
+<%= render FlatPack::TextInput::Component.new(
+  name: "feature[subtitle]",
+  value: subtitle,
+  label: "Subtitle"
+) %>
+<%= render FlatPack::TextArea::Component.new(
+  name: "feature[description]",
+  value: description,
+  label: "Description",
+  rich_text: true
+) %>
