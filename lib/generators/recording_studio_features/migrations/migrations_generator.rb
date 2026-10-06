@@ -47,9 +47,6 @@ module RecordingStudioFeatures
 
           copy_file source_path, destination_path
           say "  create  #{destination_path}", :green
-
-          # Small delay to ensure unique timestamps
-          sleep 0.1
         end
 
         say "\nRun 'bin/rails db:migrate' to apply the migrations.", :green
@@ -62,9 +59,9 @@ module RecordingStudioFeatures
       end
 
       def next_migration_number
-        ActiveRecord::Migration.next_migration_number(
-          Time.now.utc.strftime("%Y%m%d%H%M%S")
-        )
+        stamp = Time.now.utc.strftime("%Y%m%d%H%M%S")
+        stamp = (@last_migration_number.to_i + 1).to_s if @last_migration_number && stamp <= @last_migration_number
+        @last_migration_number = stamp
       end
     end
   end

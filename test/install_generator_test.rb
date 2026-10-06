@@ -160,11 +160,12 @@ class InstallGeneratorTest < Minitest::Test
   end
 
   def tailwind_source_lines
+    gem_source = "../../../../../../usr/local/bundle/ruby/**/bundler/gems"
     [
       '@source "../../vendor/bundle/**/recording_studio_features/app/views/**/*.erb";',
-      '@source "../../../../../../usr/local/bundle/ruby/**/bundler/gems/recording_studio_features-*/app/views/**/*.erb";',
+      %(@source "#{gem_source}/recording_studio_features-*/app/views/**/*.erb";),
       '@source "../../vendor/bundle/**/flatpack/app/components/**/*.{rb,erb}";',
-      '@source "../../../../../../usr/local/bundle/ruby/**/bundler/gems/flatpack-*/app/components/**/*.{rb,erb}";'
+      %(@source "#{gem_source}/flatpack-*/app/components/**/*.{rb,erb}";)
     ]
   end
 end

@@ -71,12 +71,7 @@ module RecordingStudioFeatures
       end
 
       def formatted_tailwind_source_block(missing_lines)
-        [
-          "\n/* Include RecordingStudioFeatures engine views for Tailwind CSS */",
-          missing_lines.first(2),
-          "\n/* Include FlatPack component sources for Tailwind CSS */",
-          missing_lines.drop(2)
-        ].flatten.reject(&:empty?).join("\n")
+        "\n#{missing_lines.join("\n")}\n"
       end
 
       def show_manual_tailwind_notice(missing_lines)

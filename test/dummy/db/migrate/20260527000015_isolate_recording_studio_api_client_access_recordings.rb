@@ -68,8 +68,7 @@ class IsolateRecordingStudioApiClientAccessRecordings < ActiveRecord::Migration[
   end
 
   def down
-    # The old shared-access topology cannot be reconstructed safely once clients
-    # have independent role changes, so this migration is intentionally one-way.
+    raise ActiveRecord::IrreversibleMigration
   end
 
   private

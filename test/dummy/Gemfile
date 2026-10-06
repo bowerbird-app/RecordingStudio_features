@@ -1,6 +1,5 @@
 source "https://rubygems.org"
 
-# Use the recording_studio_features engine
 gem "recording_studio_features", path: "../.."
 
 # RecordingStudio engine
