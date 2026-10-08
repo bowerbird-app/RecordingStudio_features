@@ -46,7 +46,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
 
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v4.3.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.11.2"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.0.6"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.0.7"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.7.3"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.6.2"'
     assert_includes gemfile, 'gem "redis", "~> 5.3"'
@@ -175,7 +175,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes readme, "dummy GitHub tag `v4.3.0`"
     assert_includes readme, "dummy GitHub tag `v0.1.207`"
     assert_includes readme, "dummy GitHub tag `v0.11.2`"
-    assert_includes readme, "dummy GitHub tag `v2.0.6`"
+    assert_includes readme, "dummy GitHub tag `v2.0.7`"
     assert_includes readme, "dummy GitHub tag `v0.7.3`"
     assert_includes readme, "dummy GitHub tag `v0.6.2`"
     assert_includes readme, "dummy GitHub tag `v0.5.1`"
