@@ -116,9 +116,9 @@ A new host also needs:
 ## Dummy pins
 
 - recording_studio dummy GitHub tag `v4.4.0`
-- recording_studio_accessible dummy GitHub tag `v0.11.2`
+- recording_studio_accessible dummy GitHub tag `v0.13.0`
 - recording_studio_admin dummy GitHub tag `v2.0.7`
-- recording_studio_attachable dummy GitHub tag `v0.7.3`
+- recording_studio_attachable dummy GitHub tag `v0.13.0`
 - recording_studio_api dummy GitHub tag `v0.6.2`
 - recording_studio_root_switchable dummy GitHub tag `v0.5.1`
-- flat_pack dummy GitHub tag `v0.1.207`
+- flat_pack dummy GitHub tag `v0.1.213`

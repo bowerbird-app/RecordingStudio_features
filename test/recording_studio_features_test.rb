@@ -45,13 +45,13 @@ class RecordingStudioFeaturesTest < Minitest::Test
     gemfile = File.read(File.expand_path("dummy/Gemfile", __dir__))
 
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v4.4.0"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.11.2"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.13.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.0.7"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.7.3"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.13.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.6.2"'
     assert_includes gemfile, 'gem "redis", "~> 5.3"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_root_switchable", tag: "v0.5.1"'
-    assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.207"'
+    assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.213"'
     refute_includes gemfile, "recording_studio/v3.0.0"
     refute_includes gemfile, 'tag: "v4.2.2"'
     refute_includes gemfile, 'tag: "v4.2.1"'
@@ -152,6 +152,8 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes initializer_source, "config.require_recordable_declarations = true"
     assert_includes initializer_source, '"RecordingStudioFeatures::Feature"'
     assert_includes initializer_source, '"RecordingStudioAttachable::Attachment"'
+    assert_includes initializer_source, '"RecordingStudioAttachable::Library"'
+    assert_includes initializer_source, '"RecordingStudioAttachable::Placement"'
     assert_includes initializer_source, '"AdminRoot"'
     refute_includes initializer_source, "config.include_children"
     refute_includes initializer_source, "config.features."
@@ -173,11 +175,11 @@ class RecordingStudioFeaturesTest < Minitest::Test
 
     assert_includes readme, "RecordingStudio"
     assert_includes readme, "dummy GitHub tag `v4.4.0`"
-    assert_includes readme, "dummy GitHub tag `v0.1.207`"
-    assert_includes readme, "dummy GitHub tag `v0.11.2`"
-    assert_includes readme, "dummy GitHub tag `v2.0.7`"
-    assert_includes readme, "dummy GitHub tag `v0.7.3`"
-    assert_includes readme, "dummy GitHub tag `v0.6.2`"
+    assert_includes readme, "flat_pack dummy GitHub tag `v0.1.213`"
+    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.13.0`"
+    assert_includes readme, "recording_studio_admin dummy GitHub tag `v2.0.7`"
+    assert_includes readme, "recording_studio_attachable dummy GitHub tag `v0.13.0`"
+    assert_includes readme, "recording_studio_api dummy GitHub tag `v0.6.2`"
     assert_includes readme, "dummy GitHub tag `v0.5.1`"
     refute_includes readme, "dummy GitHub tag `v4.2.2`"
     refute_includes readme, "dummy GitHub tag `v4.2.1`"
