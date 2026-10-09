@@ -60,7 +60,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes gemfile, 'tag: "v0.5.0"'
     refute_includes gemfile, 'tag: "v0.1.177"'
     refute_includes gemfile, 'tag: "v0.1.133"'
-    refute_includes gemfile, 'tag: "v0.6.0"'
+    refute_includes gemfile, 'tag: "v0.5.1"'
     refute_includes gemfile, 'tag: "0.3.1"'
   end
 
