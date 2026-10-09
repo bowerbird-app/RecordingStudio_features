@@ -55,7 +55,9 @@ Mount the catalogue under the admin root. `AdminRoot` includes the Features sect
 config.recordable_types = [
   "AdminRoot",
   "RecordingStudioFeatures::Feature",
-  "RecordingStudioAttachable::Attachment"
+  "RecordingStudioAttachable::Attachment",
+  "RecordingStudioAttachable::Library",
+  "RecordingStudioAttachable::Placement"
 ]
 
 # config/initializers/recording_studio_features.rb
@@ -107,7 +109,7 @@ Agents then call `/recording_studio_api/apis/catalogue/v1/features`.
 
 A new host also needs:
 
-- `RecordingStudioFeatures::Feature` and `RecordingStudioAttachable::Attachment` in `recordable_types`
+- `RecordingStudioFeatures::Feature`, `RecordingStudioAttachable::Attachment`, `RecordingStudioAttachable::Library`, and `RecordingStudioAttachable::Placement` in `recordable_types`
 - `config.root_types` set to the recordable types that may parent a feature
 - mounts for Attachable, the API, this engine, and `recording_studio_admin_for`
 - an admin root whose sections include `:features`
@@ -116,9 +118,9 @@ A new host also needs:
 ## Dummy pins
 
 - recording_studio dummy GitHub tag `v4.4.0`
-- recording_studio_accessible dummy GitHub tag `v0.11.2`
+- recording_studio_accessible dummy GitHub tag `v0.13.0`
 - recording_studio_admin dummy GitHub tag `v2.0.7`
-- recording_studio_attachable dummy GitHub tag `v0.7.3`
+- recording_studio_attachable dummy GitHub tag `v0.13.0`
 - recording_studio_api dummy GitHub tag `v0.6.2`
-- recording_studio_root_switchable dummy GitHub tag `v0.5.1`
-- flat_pack dummy GitHub tag `v0.1.207`
+- recording_studio_root_switchable dummy GitHub tag `v0.6.0`
+- flat_pack dummy GitHub tag `v0.1.213`
