@@ -45,7 +45,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     gemfile = File.read(File.expand_path("dummy/Gemfile", __dir__))
 
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v4.5.0"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.13.0"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.15.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.1.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.13.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.6.2"'
@@ -86,6 +86,24 @@ class RecordingStudioFeaturesTest < Minitest::Test
       )
     )
     assert_includes invitation_migration, "create_table :recording_studio_access_invitations"
+    assert_includes schema, 'create_table "recording_studio_access_constraints"'
+    assert_includes schema, "index_recording_studio_access_constraints_on_action"
+    assert_includes schema, 'create_table "recording_studio_access_rules"'
+    assert_includes schema, "index_recording_studio_access_rules_on_action"
+    constraints_migration = File.read(
+      File.expand_path(
+        "dummy/db/migrate/20261012044307_create_recording_studio_access_constraints.rb",
+        __dir__
+      )
+    )
+    rules_migration = File.read(
+      File.expand_path(
+        "dummy/db/migrate/20261012044308_create_recording_studio_access_rules.rb",
+        __dir__
+      )
+    )
+    assert_includes constraints_migration, "create_table :recording_studio_access_constraints"
+    assert_includes rules_migration, "create_table :recording_studio_access_rules"
   end
 
   def test_template_does_not_ship_copied_core_hooks_or_base_service
@@ -177,7 +195,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes readme, "RecordingStudio"
     assert_includes readme, "dummy GitHub tag `v4.5.0`"
     assert_includes readme, "flat_pack dummy GitHub tag `v0.1.213`"
-    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.13.0`"
+    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.15.0`"
     assert_includes readme, "recording_studio_admin dummy GitHub tag `v2.1.0`"
     assert_includes readme, "recording_studio_attachable dummy GitHub tag `v0.13.0`"
     assert_includes readme, "recording_studio_api dummy GitHub tag `v0.6.2`"
