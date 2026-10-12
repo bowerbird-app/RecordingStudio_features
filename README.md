@@ -122,5 +122,6 @@ A new host also needs:
 - recording_studio_admin dummy GitHub tag `v2.1.0`
 - recording_studio_attachable dummy GitHub tag `v0.13.0`
 - recording_studio_api dummy GitHub tag `v0.6.2`
-- recording_studio_root_switchable dummy GitHub tag `v0.6.0`
+- recording_studio_root_switchable dummy GitHub tag `v0.8.0`
+- recording_studio_metrics dummy GitHub tag `v0.2.0` (required by root_switchable)
 - flat_pack dummy GitHub tag `v0.1.213`
