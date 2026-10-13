@@ -11,7 +11,8 @@ gem "recording_studio_admin", github: "bowerbird-app/RecordingStudio_admin", tag
 gem "recording_studio_api", github: "bowerbird-app/RecordingStudio_api", tag: "v0.7.0"
 gem "recording_studio_attachable", github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.15.0"
 # Required by attachable >= 0.14.0, admin >= 2.3.0, and api >= 0.7.0 (not on RubyGems)
-gem "recording_studio_metrics", github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.2.2"
+gem "recording_studio_metrics", github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.2.3",
+                                require: false
 # Required by admin >= 2.3.0 (query helpers only; not on RubyGems)
 gem "recording_studio_trashable", github: "bowerbird-app/RecordingStudio_trashable", tag: "v0.10.0",
                                   require: false

@@ -51,7 +51,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.7.0"'
     assert_includes gemfile, 'gem "redis", "~> 5.3"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_root_switchable", tag: "v0.9.0"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.2.2"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.2.3"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_trashable", tag: "v0.10.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_cache", tag: "v0.5.0"'
     assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.213"'
@@ -64,6 +64,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes gemfile, 'tag: "v2.2.0"'
     refute_includes gemfile, 'tag: "v0.6.2"'
     refute_includes gemfile, 'tag: "v0.2.0"'
+    refute_includes gemfile, 'tag: "v0.2.2"'
     refute_includes gemfile, 'tag: "v0.1.177"'
     refute_includes gemfile, 'tag: "v0.1.133"'
     refute_includes gemfile, 'tag: "v0.5.1"'
@@ -206,7 +207,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes readme, "recording_studio_api dummy GitHub tag `v0.7.0`"
     assert_includes readme, "recording_studio_root_switchable dummy GitHub tag `v0.9.0`"
     assert_includes readme, "recording_studio_cache dummy GitHub tag `v0.5.0`"
-    assert_includes readme, "recording_studio_metrics dummy GitHub tag `v0.2.2`"
+    assert_includes readme, "recording_studio_metrics dummy GitHub tag `v0.2.3`"
     assert_includes readme, "recording_studio_trashable dummy GitHub tag `v0.10.0`"
     refute_includes readme, "dummy GitHub tag `v4.2.2`"
     refute_includes readme, "dummy GitHub tag `v4.2.1`"
@@ -217,6 +218,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes readme, "recording_studio_admin dummy GitHub tag `v2.2.0`"
     refute_includes readme, "recording_studio_api dummy GitHub tag `v0.6.2`"
     refute_includes readme, "recording_studio_metrics dummy GitHub tag `v0.2.0`"
+    refute_includes readme, "recording_studio_metrics dummy GitHub tag `v0.2.2`"
     refute_includes readme, "v0.1.133"
     refute_includes readme, "v3 declarations"
     refute_includes readme, "RecordingStudio v3"
