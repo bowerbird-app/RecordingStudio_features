@@ -208,7 +208,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes readme, "dummy GitHub tag `v4.2.0`"
     refute_includes readme, "v0.1.177"
     refute_includes readme, "v0.9.1"
-    refute_includes readme, "v0.5.0"
+    refute_includes readme, "root_switchable dummy GitHub tag `v0.8.0`"
     refute_includes readme, "v0.1.133"
     refute_includes readme, "v3 declarations"
     refute_includes readme, "RecordingStudio v3"
