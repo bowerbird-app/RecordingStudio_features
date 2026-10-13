@@ -14,7 +14,7 @@ gem "recording_studio_attachable", github: "bowerbird-app/RecordingStudio_attach
 gem "recording_studio_metrics", github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.2.0"
 # Required by admin >= 2.3.0 (query helpers only; not on RubyGems)
 gem "recording_studio_trashable", github: "bowerbird-app/RecordingStudio_trashable", tag: "v0.10.0",
-                                 require: false
+                                  require: false
 gem "redis", "~> 5.3"
 
 gem "devise"
