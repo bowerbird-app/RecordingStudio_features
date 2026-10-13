@@ -45,7 +45,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     gemfile = File.read(File.expand_path("dummy/Gemfile", __dir__))
 
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v4.5.0"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.15.0"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.17.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.3.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.15.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.6.2"'
@@ -198,7 +198,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes readme, "RecordingStudio"
     assert_includes readme, "dummy GitHub tag `v4.5.0`"
     assert_includes readme, "flat_pack dummy GitHub tag `v0.1.213`"
-    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.15.0`"
+    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.17.0`"
     assert_includes readme, "recording_studio_admin dummy GitHub tag `v2.3.0`"
     assert_includes readme, "recording_studio_attachable dummy GitHub tag `v0.15.0`"
     assert_includes readme, "recording_studio_api dummy GitHub tag `v0.6.2`"

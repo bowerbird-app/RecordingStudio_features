@@ -118,12 +118,12 @@ A new host also needs:
 ## Dummy pins
 
 - recording_studio dummy GitHub tag `v4.5.0`
-- recording_studio_accessible dummy GitHub tag `v0.15.0`
+- recording_studio_accessible dummy GitHub tag `v0.17.0`
 - recording_studio_admin dummy GitHub tag `v2.3.0`
 - recording_studio_attachable dummy GitHub tag `v0.15.0`
 - recording_studio_api dummy GitHub tag `v0.6.2`
 - recording_studio_root_switchable dummy GitHub tag `v0.9.0`
 - recording_studio_metrics dummy GitHub tag `v0.2.0` (required by root_switchable, attachable >= 0.14, and admin >= 2.3)
-- recording_studio_trashable dummy GitHub tag `v0.10.0` (required by admin >= 2.3; query helpers only)
+- recording_studio_trashable dummy GitHub tag `v0.10.0` (required by admin >= 2.3 and accessible >= 0.17; query helpers only)
 - recording_studio_cache dummy GitHub tag `v0.5.0` (required by root_switchable >= 0.9)
 - flat_pack dummy GitHub tag `v0.1.213`
