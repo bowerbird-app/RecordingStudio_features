@@ -4,7 +4,37 @@ require "test_helper"
 
 class RecordingStudioFeaturesTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.1.11", ::RecordingStudioFeatures::VERSION
+    assert_equal "0.1.12", ::RecordingStudioFeatures::VERSION
+
+    root = File.expand_path("..", __dir__)
+    ["Gemfile.lock", "test/dummy/Gemfile.lock"].each do |relative|
+      lockfile = File.read(File.join(root, relative))
+
+      assert_includes lockfile, "recording_studio_features (0.1.12)", relative
+    end
+  end
+
+  def test_ci_requests_ruby_minor_and_pins_stay_in_sync
+    root = File.expand_path("..", __dir__)
+    workflows = [
+      ".github/workflows/ci.yml",
+      ".github/workflows/security.yml",
+      "test/dummy/.github/workflows/ci.yml"
+    ]
+
+    workflows.each do |relative|
+      source = File.read(File.join(root, relative))
+
+      refute_match(/ruby-version:\s+\.ruby-version\b/, source, relative)
+      assert_includes source, 'ruby-version: "3.3"', relative
+    end
+
+    pins = [".ruby-version", "test/dummy/.ruby-version"].map do |relative|
+      File.read(File.join(root, relative)).strip
+    end
+
+    assert_equal pins.fetch(0), pins.fetch(1)
+    assert_match(/\A3\.3\.\d+\z/, pins.fetch(0))
   end
 
   def test_engine_exists
