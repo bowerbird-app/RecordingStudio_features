@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.12 - 2026-10-21
+
+CI asks setup-ruby for Ruby `3.3`, the latest 3.3 patch published for the runner. The `3.3.6` pin in `.ruby-version` is not built for ubuntu-26.04, so lint, Brakeman, Bundler Audit, and Importmap Audit failed while installing Ruby. The test matrix already requested `3.3` and `3.4`. Root and dummy `.ruby-version` stay on `3.3.6` so local installs keep a full patch.
+
+Committed coverage output is removed, along with `MIGRATION_NOTES.md`, `UPDATE_SUMMARY.md`, and `test_codespaces_setup.sh` (#20).
+
+No functional changes.
+
+### Upgrade notes
+
+No upgrade steps. Required Ruby stays `>= 3.3.0`.
+
 ## 0.1.0 - 2026-10-06
 
 First release. A descriptive catalogue of product features.
