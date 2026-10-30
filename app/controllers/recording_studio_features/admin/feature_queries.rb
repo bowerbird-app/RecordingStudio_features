@@ -22,10 +22,10 @@ module RecordingStudioFeatures
       end
 
       def current_feature_root
-        if defined?(RecordingStudio::RootSwitchable)
-          RecordingStudio::RootSwitchable.current_root_recording
-        elsif respond_to?(:current_root_recording)
+        if respond_to?(:current_root_recording)
           current_root_recording
+        elsif defined?(RecordingStudio::RootSwitchable)
+          RecordingStudio::RootSwitchable.current_root_recording
         end
       end
 

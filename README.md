@@ -124,6 +124,6 @@ A new host also needs:
 - recording_studio_api dummy GitHub tag `v0.7.0`
 - recording_studio_root_switchable dummy GitHub tag `v0.9.0`
 - recording_studio_metrics dummy GitHub tag `v0.2.3` (required by root_switchable, attachable >= 0.14, admin >= 2.3, and api >= 0.7)
-- recording_studio_trashable dummy GitHub tag `v0.11.0` (required by admin >= 2.3, accessible >= 0.17, and api >= 0.7; query helpers only)
+- recording_studio_trashable dummy GitHub tag `v0.11.0` (gemspec `~> 0.10`; also required by admin >= 2.3, accessible >= 0.17, and api >= 0.7; query helpers only)
 - recording_studio_cache dummy GitHub tag `v0.5.0` (required by root_switchable >= 0.9)
 - flat_pack dummy GitHub tag `v0.1.213`

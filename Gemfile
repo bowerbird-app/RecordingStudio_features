@@ -13,7 +13,7 @@ gem "recording_studio_attachable", github: "bowerbird-app/RecordingStudio_attach
 # Required by attachable >= 0.14.0, admin >= 2.3.0, and api >= 0.7.0 (not on RubyGems)
 gem "recording_studio_metrics", github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.2.3",
                                 require: false
-# Required by admin >= 2.3.0 (query helpers only; not on RubyGems)
+# Required by this gemspec (~> 0.10) and by admin >= 2.3.0 (query helpers only; not on RubyGems)
 gem "recording_studio_trashable", github: "bowerbird-app/RecordingStudio_trashable", tag: "v0.11.0",
                                   require: false
 gem "redis", "~> 5.3"

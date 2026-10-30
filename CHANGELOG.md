@@ -1,13 +1,16 @@
 # Changelog
 
-## 0.1.13 - 2026-10-30
+## 0.2.0 - 2026-10-30
 
-Admin Features CRUD is split across authorization, write, and query modules. YAML and `config.x` loading rescue Psych, file-not-found, and Rails `config_for` missing-file errors only. The admin catalogue query uses Trashable kept SQL. Hosts read the current root through RootSwitchable (or a public `current_root_recording`). Configuration can be reset with `reset_configuration!`. Template names in copilot instructions, the Rails architect agent, and Cursor environment identity now say Features.
+Admin Features CRUD is split across authorization, write, and query modules. YAML and `config.x` loading rescue Psych, file-not-found, and Rails `config_for` missing-file errors only. The admin catalogue query uses Trashable kept SQL. This gem now depends on `recording_studio_trashable` `~> 0.10` because that query is required at boot. Admin stays `~> 2.0`. Hosts read the current root from the controller's `current_root_recording`, then `RecordingStudio::RootSwitchable`. Configuration can be reset with `reset_configuration!`. Template names in copilot instructions, the Rails architect agent, and Cursor environment identity now say Features.
+
+The dummy attach-replace test records a second feature and imports that file through Attachable so `replace_attachment_file` can use a signed blob without `ActiveStorage::Blob.create_and_upload!`.
 
 ### Upgrade notes
 
 1. Invalid `config/recording_studio_features.yml` that is not a Psych parse error, missing file, or `Errno` now raises while the engine loads instead of being ignored.
 2. `RecordingStudioFeatures.reset_configuration!` replaces the shared configuration object. Tests that swapped `@configuration` should call that (or `configuration=`) instead.
+3. Install `recording_studio_trashable` `~> 0.10`. Admin `2.0`–`2.2` does not pull it; without it the engine raises `LoadError` at boot.
 
 ## 0.1.12 - 2026-10-21
 
@@ -47,7 +50,7 @@ No upgrade steps.
 
 ## 0.1.8 - 2026-10-13
 
-Dummy and root pins use Recording Studio API `v0.7.0`, Accessible `v0.17.0`, Admin `v2.3.0`, and Root Switchable `v0.9.0`.
+Dummy and root pins use Recording Studio API `v0.7.0`, Accessible `v0.17.0`, Admin `v2.3.0`, Root Switchable `v0.9.0`, Trashable `v0.10.0`, and Metrics `v0.2.3`.
 
 ### Upgrade notes
 
@@ -71,7 +74,7 @@ No upgrade steps.
 
 ## 0.1.5 - 2026-10-09
 
-Dummy and root pins use Recording Studio Admin `v2.1.0` and matching i18n releases of Accessible, Attachable, and Root Switchable.
+Dummy and root pins use Recording Studio Admin `v2.1.0`, FlatPack `v0.1.213`, and matching i18n releases of Accessible, Attachable, and Root Switchable.
 
 ### Upgrade notes
 
