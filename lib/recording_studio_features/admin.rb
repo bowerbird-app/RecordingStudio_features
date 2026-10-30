@@ -26,15 +26,9 @@ module RecordingStudioFeatures
       subtitle "What this product does."
       blast_radius :root
       query do |context|
-        root = context.root_recording
-        next RecordingStudio::Recording.none if root.blank?
-
-        relation = RecordingStudio::Recording.where(
-          recordable_type: "RecordingStudioFeatures::Feature",
-          parent_recording_id: root.id
-        )
-        relation = relation.where(trashed_at: nil) if RecordingStudio::Recording.column_names.include?("trashed_at")
-        relation.includes(:recordable).order(updated_at: :desc)
+        RecordingStudioFeatures::FeatureCatalogue.recordings_for(context.root_recording)
+                                                 .includes(:recordable)
+                                                 .order(updated_at: :desc)
       end
 
       table do

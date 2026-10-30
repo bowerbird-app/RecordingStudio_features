@@ -4,13 +4,13 @@ require "test_helper"
 
 class EngineTest < Minitest::Test
   def setup
-    @original_configuration = RecordingStudioFeatures.instance_variable_get(:@configuration)
-    RecordingStudioFeatures.instance_variable_set(:@configuration, RecordingStudioFeatures::Configuration.new)
+    @original_configuration = RecordingStudioFeatures.configuration
+    RecordingStudioFeatures.reset_configuration!
   end
 
   def teardown
     RecordingStudioFeatures.configuration.hooks.clear!
-    RecordingStudioFeatures.instance_variable_set(:@configuration, @original_configuration)
+    RecordingStudioFeatures.configuration = @original_configuration
   end
 
   def test_before_and_after_initialize_initializers_run_hooks
@@ -51,7 +51,7 @@ class EngineTest < Minitest::Test
     assert_equal "/from-x", RecordingStudioFeatures.configuration.mount_path
   end
 
-  def test_load_config_handles_errors_and_each_pair_fallback
+  def test_load_config_handles_missing_yaml_and_each_pair_fallback
     pair_config = Class.new do
       def each_pair
         yield(:mount_path, "/from-pair")
@@ -63,7 +63,7 @@ class EngineTest < Minitest::Test
 
     app = Struct.new(:config) do
       def config_for(_name)
-        raise "missing file"
+        raise "Could not load configuration. No such file - config/recording_studio_features.yml"
       end
     end.new(app_config)
 
@@ -72,7 +72,7 @@ class EngineTest < Minitest::Test
     assert_equal "/from-pair", RecordingStudioFeatures.configuration.mount_path
   end
 
-  def test_load_config_swallow_each_pair_errors
+  def test_load_config_does_not_swallow_each_pair_errors
     bad_pair_config = Class.new do
       def each_pair
         raise "bad pair"
@@ -87,8 +87,11 @@ class EngineTest < Minitest::Test
       end
     end.new(app_config)
 
-    find_initializer("recording_studio_features.load_config").block.call(app)
+    error = assert_raises(RuntimeError) do
+      find_initializer("recording_studio_features.load_config").block.call(app)
+    end
 
+    assert_equal "bad pair", error.message
     assert_equal "/from-yaml", RecordingStudioFeatures.configuration.mount_path
   end
 
@@ -101,7 +104,25 @@ class EngineTest < Minitest::Test
     assert_equal "/recording_studio_features", RecordingStudioFeatures.configuration.mount_path
   end
 
-  def test_load_config_ignores_non_enumerable_yaml_and_merge_errors
+  def test_load_config_ignores_non_enumerable_yaml
+    yaml = Object.new
+    xcfg = Struct.new(:recording_studio_features).new({ mount_path: "/from-x" })
+    app_config = Struct.new(:x).new(xcfg)
+    app = Struct.new(:config) do
+      attr_accessor :yaml
+
+      def config_for(_name)
+        @yaml
+      end
+    end.new(app_config)
+    app.yaml = yaml
+
+    find_initializer("recording_studio_features.load_config").block.call(app)
+
+    assert_equal "/from-x", RecordingStudioFeatures.configuration.mount_path
+  end
+
+  def test_load_config_does_not_swallow_yaml_each_errors
     yaml = Class.new do
       def each
         raise "bad yaml"
@@ -118,6 +139,22 @@ class EngineTest < Minitest::Test
       end
     end.new(app_config)
     app.yaml = yaml
+
+    error = assert_raises(RuntimeError) do
+      find_initializer("recording_studio_features.load_config").block.call(app)
+    end
+
+    assert_equal "bad yaml", error.message
+  end
+
+  def test_load_config_swallows_psych_errors_from_yaml
+    xcfg = Struct.new(:recording_studio_features).new({ mount_path: "/from-x" })
+    app_config = Struct.new(:x).new(xcfg)
+    app = Struct.new(:config) do
+      def config_for(_name)
+        raise Psych::SyntaxError.new("file.yml", 1, 1, 0, "bad yaml", nil)
+      end
+    end.new(app_config)
 
     find_initializer("recording_studio_features.load_config").block.call(app)
 
@@ -157,14 +194,12 @@ class EngineTest < Minitest::Test
       end
     end
     applied = []
-    active_record_base = Class.new
-    active_record_base.define_singleton_method(:descendants) { [abstract_model, concrete_model] }
 
     RecordingStudioFeatures::Engine.stub(:config, config_stub) do
       find_initializer("recording_studio_features.apply_model_extensions").block.call
     end
 
-    with_temporary_nested_constant(:ActiveRecord, :Base, active_record_base) do
+    ActiveRecord::Base.stub(:descendants, [abstract_model, concrete_model]) do
       RecordingStudioFeatures::Engine.stub(:apply_model_extensions, ->(model) { applied << model }) do
         to_prepare_blocks.first.call
       end
@@ -183,14 +218,12 @@ class EngineTest < Minitest::Test
     first_controller = Class.new
     second_controller = Class.new
     applied = []
-    action_controller_base = Class.new
-    action_controller_base.define_singleton_method(:descendants) { [first_controller, second_controller] }
 
     RecordingStudioFeatures::Engine.stub(:config, config_stub) do
       find_initializer("recording_studio_features.apply_controller_extensions").block.call
     end
 
-    with_temporary_nested_constant(:ActionController, :Base, action_controller_base) do
+    ActionController::Base.stub(:descendants, [first_controller, second_controller]) do
       RecordingStudioFeatures::Engine.stub(:apply_controller_extensions, ->(controller) { applied << controller }) do
         to_prepare_blocks.first.call
       end
@@ -238,62 +271,80 @@ class EngineTest < Minitest::Test
     assert_equal :applied, instance.template_controller_extension
   end
 
-  def test_apply_extensions_flattens_compacts_and_tracks_identity
-    target = Class.new
+  def test_apply_model_extensions_skips_duplicate_extension_blocks
+    target = Class.new do
+      def self.name
+        "GeneratedRecord"
+      end
+    end
+    calls = 0
     extension = proc do
+      calls += 1
       def generated_method
         :generated
       end
     end
 
-    RecordingStudioFeatures::Engine.send(:apply_extensions, target, [nil, [extension, extension]])
+    RecordingStudioFeatures.configuration.hooks.extend_model(:GeneratedRecord, &extension)
+    RecordingStudioFeatures.configuration.hooks.extend_model(:GeneratedRecord, &extension)
+
+    RecordingStudioFeatures::Engine.apply_model_extensions(target)
+    RecordingStudioFeatures::Engine.apply_model_extensions(target)
 
     assert_equal :generated, target.new.generated_method
-    assert_equal true, target.instance_variable_get(:@recording_studio_features_applied_extensions).compare_by_identity?
+    assert_equal 1, calls
   end
 
-  def test_apply_extensions_returns_without_target
-    assert_nil RecordingStudioFeatures::Engine.send(:apply_extensions, nil, [])
+  def test_apply_model_extensions_returns_without_target
+    assert_nil RecordingStudioFeatures::Engine.apply_model_extensions(nil)
   end
 
-  def test_extension_keys_for_includes_demodulized_name
+  def test_extension_keys_include_namespaced_and_demodulized_controller_names
     namespaced = Class.new do
       def self.name
         "Admin::ReportsController"
       end
     end
+    RecordingStudioFeatures.configuration.hooks.extend_controller(:"Admin::ReportsController") do
+      def namespaced_extension
+        :namespaced
+      end
+    end
+    RecordingStudioFeatures.configuration.hooks.extend_controller(:ReportsController) do
+      def demodulized_extension
+        :demodulized
+      end
+    end
 
-    expected_keys = [:"Admin::ReportsController"]
-    expected_keys << :ReportsController
+    RecordingStudioFeatures::Engine.apply_controller_extensions(namespaced)
+    instance = namespaced.new
 
-    assert_equal expected_keys, RecordingStudioFeatures::Engine.send(:extension_keys_for, namespaced)
+    assert_equal :namespaced, instance.namespaced_extension
+    assert_equal :demodulized, instance.demodulized_extension
   end
 
-  def test_extension_keys_for_removes_duplicate_names
+  def test_extension_keys_for_plain_controller_name_apply_once
     plain = Class.new do
       def self.name
         "ReportsController"
       end
     end
+    calls = 0
+    extension = proc do
+      calls += 1
+      def reports_extension
+        :applied
+      end
+    end
 
-    assert_equal [:ReportsController], RecordingStudioFeatures::Engine.send(:extension_keys_for, plain)
+    RecordingStudioFeatures.configuration.hooks.extend_controller(:ReportsController, &extension)
+    RecordingStudioFeatures::Engine.apply_controller_extensions(plain)
+
+    assert_equal :applied, plain.new.reports_extension
+    assert_equal 1, calls
   end
 
   private
-
-  def with_temporary_nested_constant(parent_name, child_name, value)
-    parent_defined = Object.const_defined?(parent_name, false)
-    parent = parent_defined ? Object.const_get(parent_name) : Object.const_set(parent_name, Module.new)
-    child_defined = parent.const_defined?(child_name, false)
-    previous_child = parent.const_get(child_name) if child_defined
-
-    parent.const_set(child_name, value)
-    yield
-  ensure
-    parent.send(:remove_const, child_name) if parent.const_defined?(child_name, false)
-    parent.const_set(child_name, previous_child) if child_defined
-    Object.send(:remove_const, parent_name) unless parent_defined
-  end
 
   def find_initializer(name)
     RecordingStudioFeatures::Engine.initializers.find { |initializer| initializer.name == name }

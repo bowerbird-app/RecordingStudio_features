@@ -4,13 +4,13 @@ require "test_helper"
 
 class RecordingStudioFeaturesTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.1.12", ::RecordingStudioFeatures::VERSION
+    assert_equal "0.2.0", ::RecordingStudioFeatures::VERSION
 
     root = File.expand_path("..", __dir__)
     ["Gemfile.lock", "test/dummy/Gemfile.lock"].each do |relative|
       lockfile = File.read(File.join(root, relative))
 
-      assert_includes lockfile, "recording_studio_features (0.1.12)", relative
+      assert_includes lockfile, "recording_studio_features (0.2.0)", relative
     end
   end
 
@@ -41,10 +41,22 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_kind_of Class, ::RecordingStudioFeatures::Engine
   end
 
+  def test_current_feature_root_asks_the_controller_first
+    source = File.read(
+      File.expand_path("../app/controllers/recording_studio_features/admin/feature_queries.rb", __dir__)
+    )
+    method_source = source[/def current_feature_root\n.*?\n      end/m]
+
+    assert_includes method_source, "respond_to?(:current_root_recording)"
+    assert_operator method_source.index("current_root_recording"), :<, method_source.index("RootSwitchable")
+  end
+
   def test_gemspec_pins_recording_studio_4_2
     gemspec = File.read(File.expand_path("../recording_studio_features.gemspec", __dir__))
 
     assert_includes gemspec, 'spec.add_dependency "recording_studio", "~> 4.2"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio_trashable", "~> 0.10"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio_admin", "~> 2.0"'
   end
 
   def test_gemspec_excludes_cursor_config
@@ -58,7 +70,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     path = File.expand_path("../.cursor/environment.json", __dir__)
     json = JSON.parse(File.read(path))
 
-    assert_equal "recording-studio-gem-template", json["name"]
+    assert_equal "recording-studio-features", json["name"]
     assert_equal ".cursor/install.sh", json["install"]
     assert_equal ".cursor/start.sh", json["start"]
     refute json.key?("snapshot"), "snapshot pins a Personal build and skips install"
