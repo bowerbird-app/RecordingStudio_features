@@ -4,13 +4,13 @@ require "test_helper"
 
 class RecordingStudioFeaturesTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.1.12", ::RecordingStudioFeatures::VERSION
+    assert_equal "0.1.13", ::RecordingStudioFeatures::VERSION
 
     root = File.expand_path("..", __dir__)
     ["Gemfile.lock", "test/dummy/Gemfile.lock"].each do |relative|
       lockfile = File.read(File.join(root, relative))
 
-      assert_includes lockfile, "recording_studio_features (0.1.12)", relative
+      assert_includes lockfile, "recording_studio_features (0.1.13)", relative
     end
   end
 
@@ -58,7 +58,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     path = File.expand_path("../.cursor/environment.json", __dir__)
     json = JSON.parse(File.read(path))
 
-    assert_equal "recording-studio-gem-template", json["name"]
+    assert_equal "recording-studio-features", json["name"]
     assert_equal ".cursor/install.sh", json["install"]
     assert_equal ".cursor/start.sh", json["start"]
     refute json.key?("snapshot"), "snapshot pins a Personal build and skips install"

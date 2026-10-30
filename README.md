@@ -13,7 +13,7 @@ This catalogue is descriptive. It is not flags, plans, entitlements, tags, order
 
 A feature row is an immutable snapshot with `created_at` only. Create with `parent.record(Feature, actor:)`. Revise with `recording.root_recording.revise(recording, actor:)`. Do not call `update` or `destroy` on a saved feature row. Deleting the recording removes the catalogue entry and leaves the snapshot row.
 
-`root_types` defaults to `["AdminRoot"]`. Assigning it re-declares the allowed parents. An empty list is invalid.
+`root_types` defaults to `["AdminRoot"]`. Assigning it re-declares the allowed parents. An empty list is invalid. Host YAML and `config.x` settings merge on boot. Psych parse errors, missing files, and Rails `config_for` missing-file errors are ignored; other load errors raise.
 
 ## Admin
 
@@ -21,7 +21,7 @@ A feature row is an immutable snapshot with `created_at` only. Create with `pare
 recording_studio_admin_for :admin, at: "/admin", root_section: :features
 ```
 
-The list is the Features screen at `/admin/screens/recording_studio_features`. Columns are Title, Subtitle, and Updated. Actions are show, edit, and destroy.
+The list is the Features screen at `/admin/screens/recording_studio_features`. It shows kept features under the current root. Columns are Title, Subtitle, and Updated. Actions are show, edit, and destroy.
 
 Mount this engine at `/recording_studio_features`. Engine routes:
 
