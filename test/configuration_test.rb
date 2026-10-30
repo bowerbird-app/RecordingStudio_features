@@ -69,4 +69,16 @@ class ConfigurationTest < Minitest::Test
     assert_kind_of RecordingStudioFeatures::Configuration, RecordingStudioFeatures.configuration
     assert_equal ["AdminRoot"], RecordingStudioFeatures.configuration.root_types
   end
+
+  def test_reset_configuration_replaces_the_shared_instance
+    original = RecordingStudioFeatures.configuration
+    RecordingStudioFeatures.configuration.mount_path = "/temporary"
+
+    RecordingStudioFeatures.reset_configuration!
+
+    refute_same original, RecordingStudioFeatures.configuration
+    assert_equal "/recording_studio_features", RecordingStudioFeatures.configuration.mount_path
+  ensure
+    RecordingStudioFeatures.configuration = original
+  end
 end

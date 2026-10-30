@@ -84,12 +84,18 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     assert_equal recording, attachment.parent_recording
     assert_equal attachment, RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording)
 
-    blob = ActiveStorage::Blob.create_and_upload!(
+    replacement_source = record_feature(title: "Replacement source")
+    replacement_attachment = replacement_source.import_attachment(
       io: File.open(png_path),
       filename: "replacement.png",
-      content_type: "image/png"
+      content_type: "image/png",
+      actor: @user,
+      identify: false
     )
-    replaced = attachment.replace_attachment_file(signed_blob_id: blob.signed_id, actor: @user)
+    replaced = attachment.replace_attachment_file(
+      signed_blob_id: replacement_attachment.recordable.file.blob.signed_id,
+      actor: @user
+    )
 
     assert_equal attachment.id, replaced.id
     assert_equal "replacement.png", replaced.reload.recordable.file.filename.to_s
