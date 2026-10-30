@@ -139,6 +139,34 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     assert_includes response.body, "On the screen"
   end
 
+  test "admin list and show only include kept features" do
+    kept = record_feature(title: "Kept feature")
+    voided = record_feature(title: "Voided feature")
+    RecordingStudioTrashable.void_recording!(voided)
+    sign_in_and_switch_root
+
+    get "/admin/screens/recording_studio_features/table"
+
+    assert_response :success
+    assert_includes response.body, "Kept feature"
+    refute_includes response.body, "Voided feature"
+
+    get "/recording_studio_features/admin/features/#{kept.id}"
+
+    assert_response :success
+    assert_includes response.body, "Kept feature"
+
+    get "/recording_studio_features/admin/features/#{voided.id}"
+
+    assert_response :not_found
+  end
+
+  test "catalogue returns none without a root" do
+    record_feature(title: "Has a root")
+
+    assert_empty RecordingStudioFeatures::FeatureCatalogue.recordings_for(nil)
+  end
+
   test "admin create update and destroy" do
     sign_in_and_switch_root
 
