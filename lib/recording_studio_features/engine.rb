@@ -6,10 +6,14 @@ module RecordingStudioFeatures
 
     class << self
       def apply_model_extensions(target)
+        return unless target
+
         apply_extensions(target, extensions_for(:model, extension_keys_for(target)))
       end
 
       def apply_controller_extensions(target)
+        return unless target
+
         apply_extensions(target, extensions_for(:controller, extension_keys_for(target)))
       end
 

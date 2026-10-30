@@ -6,6 +6,7 @@ require "recording_studio_admin"
 require "recording_studio_attachable"
 require "recording_studio_features/version"
 require "recording_studio_features/configuration"
+require "recording_studio_features/feature_catalogue"
 require "recording_studio_features/engine"
 require "recording_studio_features/api"
 require "recording_studio_features/admin"
@@ -15,8 +16,14 @@ module RecordingStudioFeatures
   class Error < StandardError; end
 
   class << self
+    attr_writer :configuration
+
     def configuration
       @configuration ||= Configuration.new
+    end
+
+    def reset_configuration!
+      @configuration = Configuration.new
     end
 
     def configure

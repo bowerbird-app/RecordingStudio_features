@@ -50,8 +50,10 @@ module RecordingStudioFeatures
 
       yaml = app.config_for(:recording_studio_features)
       merge!(yaml) if yaml.respond_to?(:each)
-    rescue StandardError
+    rescue Psych::Exception, Errno::ENOENT, Errno::EACCES
       nil
+    rescue RuntimeError => e
+      raise unless missing_rails_config_file?(e)
     end
 
     def merge_x_config(app)
@@ -59,8 +61,12 @@ module RecordingStudioFeatures
       return if xcfg.nil?
 
       merge!(x_config_hash(xcfg))
-    rescue StandardError
+    rescue Psych::Exception, Errno::ENOENT, Errno::EACCES
       nil
+    end
+
+    def missing_rails_config_file?(error)
+      error.message.include?("Could not load configuration. No such file")
     end
 
     def rails_x_config(app)
