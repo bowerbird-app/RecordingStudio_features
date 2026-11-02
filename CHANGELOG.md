@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.2.1 - 2026-10-30
+
+The dummy app no longer ships `test/dummy/install_page.html`, a captured template leftover.
+
+### Upgrade notes
+
+No upgrade steps.
+
 ## 0.2.0 - 2026-10-30
 
 Admin Features CRUD is split across authorization, write, and query modules. YAML and `config.x` loading rescue Psych, file-not-found, and Rails `config_for` missing-file errors only. The admin catalogue query uses Trashable kept SQL. This gem now depends on `recording_studio_trashable` `~> 0.10` because that query is required at boot. Admin stays `~> 2.0`. Hosts read the current root from the controller's `current_root_recording`, then `RecordingStudio::RootSwitchable`. Configuration can be reset with `reset_configuration!`. Template names in copilot instructions, the Rails architect agent, and Cursor environment identity now say Features.
