@@ -4,13 +4,13 @@ require "test_helper"
 
 class RecordingStudioFeaturesTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.2.1", ::RecordingStudioFeatures::VERSION
+    assert_equal "0.2.2", ::RecordingStudioFeatures::VERSION
 
     root = File.expand_path("..", __dir__)
     ["Gemfile.lock", "test/dummy/Gemfile.lock"].each do |relative|
       lockfile = File.read(File.join(root, relative))
 
-      assert_includes lockfile, "recording_studio_features (0.2.1)", relative
+      assert_includes lockfile, "recording_studio_features (0.2.2)", relative
     end
   end
 
@@ -54,9 +54,22 @@ class RecordingStudioFeaturesTest < Minitest::Test
   def test_gemspec_pins_recording_studio_4_2
     gemspec = File.read(File.expand_path("../recording_studio_features.gemspec", __dir__))
 
+    assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.210"'
+    refute_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.144"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio", "~> 4.2"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio_trashable", "~> 0.10"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio_admin", "~> 2.0"'
+  end
+
+  def test_admin_feature_views_label_image_with_section_title
+    expected = 'FlatPack::SectionTitle::Component.new(title: "Image", size: :sm, spacing: :none, level: :h3)'
+    %w[show edit].each do |action|
+      view_path = "../app/views/recording_studio_features/admin/features/#{action}.html.erb"
+      view = File.read(File.expand_path(view_path, __dir__))
+
+      assert_includes view, expected
+      refute_includes view, 'class="text-sm font-medium">Image'
+    end
   end
 
   def test_gemspec_excludes_cursor_config
