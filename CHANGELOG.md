@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.2.2 - 2026-11-02
+
+Admin show and edit label the image block with FlatPack `SectionTitle` (`size: :sm`, `spacing: :none`, `level: :h3`) instead of a raw paragraph. This gem now requires `flat_pack` `>= 0.1.210` for those `SectionTitle` arguments. The dummy lock stays on FlatPack `v0.1.213`.
+
+### Upgrade notes
+
+1. Hosts must run FlatPack `>= 0.1.210`.
+2. The Image heading on admin show and edit is an `h3` (`text-base font-semibold`) instead of `p.text-sm.font-medium`.
+
 ## 0.2.1 - 2026-10-30
 
 The dummy app no longer ships `test/dummy/install_page.html`, a captured template leftover.

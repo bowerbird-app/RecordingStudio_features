@@ -155,6 +155,9 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
 
     assert_response :success
     assert_includes response.body, "Kept feature"
+    assert_includes response.body, "<h3"
+    assert_includes response.body, ">Image<"
+    refute_includes response.body, 'class="text-sm font-medium">Image'
 
     get "/recording_studio_features/admin/features/#{voided.id}"
 
@@ -190,6 +193,9 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_includes response.body, 'id="feature-form"'
     assert_includes response.body, 'form="feature-form"'
+    assert_includes response.body, "<h3"
+    assert_includes response.body, ">Image<"
+    refute_includes response.body, 'class="text-sm font-medium">Image'
     assert_operator response.body.index(">Image<"), :<, response.body.index(">Update<")
 
     patch "/recording_studio_features/admin/features/#{recording.id}", params: {
