@@ -27,5 +27,9 @@ module RecordingStudioFeatures
     def destroy_attachment_path(...)
       recording_studio_attachable.destroy_attachment_path(...)
     end
+
+    def recording_direct_uploads_path(...)
+      recording_studio_attachable.recording_direct_uploads_path(...)
+    end
   end
 end

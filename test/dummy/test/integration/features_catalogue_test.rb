@@ -70,39 +70,31 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     assert_equal "Search", revised.recordable.title
   end
 
-  test "attach replace and remove an image" do
+  test "attach and remove an image" do
     recording = record_feature(title: "With image")
     attachment = recording.import_attachment(
       io: File.open(png_path),
       filename: "feature.png",
       content_type: "image/png",
-      actor: @user,
-      identify: false
+      actor: @user
     )
 
     assert_equal "RecordingStudioAttachable::Attachment", attachment.recordable_type
     assert_equal recording, attachment.parent_recording
     assert_equal attachment, RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording)
 
-    replacement_source = record_feature(title: "Replacement source")
-    replacement_attachment = replacement_source.import_attachment(
+    attachment.remove_attachment(actor: @user)
+
+    assert_nil RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording.reload)
+
+    recording.import_attachment(
       io: File.open(png_path),
-      filename: "replacement.png",
+      filename: "again.png",
       content_type: "image/png",
-      actor: @user,
-      identify: false
-    )
-    replaced = attachment.replace_attachment_file(
-      signed_blob_id: replacement_attachment.recordable.file.blob.signed_id,
       actor: @user
     )
 
-    assert_equal attachment.id, replaced.id
-    assert_equal "replacement.png", replaced.reload.recordable.file.filename.to_s
-
-    replaced.remove_attachment(actor: @user)
-
-    assert_nil RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording.reload)
+    refute_nil RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording.reload)
   end
 
   test "destroy removes the feature recording when an image child exists and leaves the snapshot" do
@@ -113,7 +105,6 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       filename: "feature.png",
       content_type: "image/png",
       actor: @user,
-      identify: false
     )
 
     recording.destroy!
@@ -252,7 +243,6 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       filename: "feature.png",
       content_type: "image/png",
       actor: @user,
-      identify: false
     )
     sign_in_and_switch_root
 
@@ -270,7 +260,6 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       filename: "feature.png",
       content_type: "image/png",
       actor: @user,
-      identify: false
     )
     view_token = catalogue_token(:view)
     edit_token = catalogue_token(:edit)

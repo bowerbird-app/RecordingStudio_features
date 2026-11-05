@@ -24,12 +24,12 @@ Gem::Specification.new do |spec|
     end
   end
 
-  spec.add_dependency "flat_pack", ">= 0.1.210"
+  spec.add_dependency "flat_pack", ">= 0.1.341"
   spec.add_dependency "rails", "~> 8.1.0"
-  spec.add_dependency "recording_studio", "~> 4.2"
+  spec.add_dependency "recording_studio", ">= 6.3.0"
   spec.add_dependency "recording_studio_accessible", "~> 0.11"
   spec.add_dependency "recording_studio_admin", "~> 2.0"
-  spec.add_dependency "recording_studio_api", "~> 0.6"
+  spec.add_dependency "recording_studio_api", "~> 0.17.0"
   spec.add_dependency "recording_studio_attachable", "~> 0.7"
   spec.add_dependency "recording_studio_trashable", "~> 0.10"
 end

@@ -1,35 +1,53 @@
-<div class="mx-auto flex w-full flex-col gap-6">
-  <%= render FlatPack::PageTitle::Component.new(
-    title: "Edit feature",
-    subtitle: @feature.title,
-    variant: :h1
-  ) %>
+<% content_for :title, "Edit feature" %>
+<% content_for :subtitle, @feature.title %>
+<% flat_pack_page_nav(
+  round: true,
+  style: :default,
+  back_href: admin_feature_path(@feature_recording),
+  back_tooltip: @feature.title
+) %>
 
-  <%= form_with url: admin_feature_path(@feature_recording), method: :patch, id: "feature-form", class: "flex w-full flex-col gap-6" do %>
+<div class="mx-auto flex min-w-0 w-full flex-col gap-6 overflow-x-auto">
+  <%= form_with url: admin_feature_path(@feature_recording), method: :patch, id: "feature-form", class: "flex min-w-0 w-full flex-col gap-6" do %>
     <%= render "form", title: @title, subtitle: @subtitle, description: @description %>
   <% end %>
 
-  <div class="flex flex-col gap-3">
+  <div class="flex min-w-0 flex-col gap-3">
     <%= render FlatPack::SectionTitle::Component.new(title: "Image", size: :sm, spacing: :none, level: :h3) %>
     <%= render_attachment_file_button(@feature_recording, return_to: request.original_fullpath, target: nil) %>
     <% if @attachment_recording %>
-      <%= form_with url: destroy_attachment_path(@attachment_recording), method: :delete, class: "inline-flex" do %>
-        <%= render FlatPack::Button::Component.new(
-          text: "Remove image",
-          style: :secondary,
-          type: "submit"
-        ) %>
+      <%= form_with url: destroy_attachment_path(@attachment_recording), method: :delete, class: "inline-flex min-w-0" do %>
+        <%= render FlatPack::ButtonGroup::Component.new(
+          variant: :outlined,
+          collapse: :menu,
+          collapse_at: 390
+        ) do |group| %>
+          <% group.button(
+               FlatPack::Button::Component.new(
+                 text: "Remove image",
+                 style: :secondary,
+                 type: "submit"
+               )
+             ) %>
+        <% end %>
       <% end %>
     <% end %>
     <% preview = attachment_preview_url(@feature_recording) %>
-    <%= image_tag preview, alt: @feature.title if preview %>
+    <%= image_tag preview, alt: @feature.title, class: "max-w-full h-auto" if preview %>
   </div>
 
-  <%= render FlatPack::Button::Component.new(
-    text: "Update",
-    style: :primary,
-    type: "submit",
-    form: "feature-form",
-    class: "w-fit"
-  ) %>
+  <%= render FlatPack::ButtonGroup::Component.new(
+    variant: :outlined,
+    collapse: :menu,
+    collapse_at: 390
+  ) do |group| %>
+    <% group.button(
+         FlatPack::Button::Component.new(
+           text: "Update",
+           style: :primary,
+           type: "submit",
+           form: "feature-form"
+         )
+       ) %>
+  <% end %>
 </div>

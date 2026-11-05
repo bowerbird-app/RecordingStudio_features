@@ -81,8 +81,7 @@ begin
         io: io,
         filename: "feature.png",
         content_type: "image/png",
-        actor: user,
-        identify: false
+        actor: user
       )
     end
   end
