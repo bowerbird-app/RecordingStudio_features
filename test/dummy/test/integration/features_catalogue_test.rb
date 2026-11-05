@@ -2,6 +2,8 @@
 
 require "test_helper"
 require "devise/test/integration_helpers"
+require "base64"
+require "digest"
 
 class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
@@ -76,8 +78,7 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       io: File.open(png_path),
       filename: "feature.png",
       content_type: "image/png",
-      actor: @user,
-      identify: false
+      actor: @user
     )
 
     assert_equal "RecordingStudioAttachable::Attachment", attachment.recordable_type
@@ -89,11 +90,20 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       io: File.open(png_path),
       filename: "replacement.png",
       content_type: "image/png",
-      actor: @user,
-      identify: false
+      actor: @user
     )
+    replacement_bytes = File.binread(png_path)
+    replacement_blob = RecordingStudioAttachable::DirectUpload.prepare!(
+      recording: recording,
+      actor: @user,
+      filename: replacement_attachment.recordable.file.filename.to_s,
+      byte_size: replacement_bytes.bytesize,
+      checksum: Base64.strict_encode64(Digest::MD5.digest(replacement_bytes)),
+      content_type: "image/png"
+    )
+    replacement_blob.upload(StringIO.new(replacement_bytes))
     replaced = attachment.replace_attachment_file(
-      signed_blob_id: replacement_attachment.recordable.file.blob.signed_id,
+      signed_blob_id: RecordingStudioAttachable::DirectUpload.sign(replacement_blob),
       actor: @user
     )
 
@@ -113,7 +123,6 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       filename: "feature.png",
       content_type: "image/png",
       actor: @user,
-      identify: false
     )
 
     recording.destroy!
@@ -252,7 +261,6 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       filename: "feature.png",
       content_type: "image/png",
       actor: @user,
-      identify: false
     )
     sign_in_and_switch_root
 
@@ -270,7 +278,6 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
       filename: "feature.png",
       content_type: "image/png",
       actor: @user,
-      identify: false
     )
     view_token = catalogue_token(:view)
     edit_token = catalogue_token(:edit)

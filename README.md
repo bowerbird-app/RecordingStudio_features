@@ -55,9 +55,7 @@ Mount the catalogue under the admin root. `AdminRoot` includes the Features sect
 config.recordable_types = [
   "AdminRoot",
   "RecordingStudioFeatures::Feature",
-  "RecordingStudioAttachable::Attachment",
-  "RecordingStudioAttachable::Library",
-  "RecordingStudioAttachable::Placement"
+  "RecordingStudioAttachable::Attachment"
 ]
 
 # config/initializers/recording_studio_features.rb
@@ -109,21 +107,28 @@ Agents then call `/recording_studio_api/apis/catalogue/v1/features`.
 
 A new host also needs:
 
-- `RecordingStudioFeatures::Feature`, `RecordingStudioAttachable::Attachment`, `RecordingStudioAttachable::Library`, and `RecordingStudioAttachable::Placement` in `recordable_types`
+- `RecordingStudioFeatures::Feature` and `RecordingStudioAttachable::Attachment` in `recordable_types`
 - `config.root_types` set to the recordable types that may parent a feature
 - mounts for Attachable, the API, this engine, and `recording_studio_admin_for`
 - an admin root whose sections include `:features`
 - a named API when the access point is not on the public API, such as `AdminRoot`
 
+## Layout
+
+`RecordingStudioFeatures.configuration.layout` defaults to `nil`. Assignment goes through `RecordingStudio::Layout.accept`. A `nil` setting uses `RecordingStudio.configuration.layout`, then `recording_studio/default_layout`. Pass a layout name, `false`, or a callable that accepts `controller:`. Engine controllers call `recording_studio_layout { RecordingStudioFeatures.configuration.layout }`. Do not hard-code `layout "recording_studio/default_layout"`.
+
+Show, new, and edit set the page heading with `content_for :title` and `:subtitle`. Back uses `flat_pack_page_nav`. Page actions use FlatPack `ButtonGroup` with `collapse: :menu` at `390` px.
+
 ## Dummy pins
 
-- recording_studio dummy GitHub tag `v4.7.0`
-- recording_studio_accessible dummy GitHub tag `v0.18.0`
-- recording_studio_admin dummy GitHub tag `v2.3.0`
-- recording_studio_attachable dummy GitHub tag `v0.15.0`
-- recording_studio_api dummy GitHub tag `v0.7.0`
-- recording_studio_root_switchable dummy GitHub tag `v0.9.0`
-- recording_studio_metrics dummy GitHub tag `v0.2.3` (required by root_switchable, attachable >= 0.14, admin >= 2.3, and api >= 0.7)
-- recording_studio_trashable dummy GitHub tag `v0.11.0` (gemspec `~> 0.10`; also required by admin >= 2.3, accessible >= 0.17, and api >= 0.7; query helpers only)
-- recording_studio_cache dummy GitHub tag `v0.5.0` (required by root_switchable >= 0.9)
-- flat_pack dummy GitHub tag `v0.1.213` (gemspec `>= 0.1.210` for `SectionTitle` size, spacing, and level)
+- recording_studio dummy GitHub tag `v6.3.0`
+- recording_studio_accessible dummy GitHub tag `v0.24.1`
+- recording_studio_admin dummy GitHub tag `v2.9.1`
+- recording_studio_attachable dummy GitHub tag `v0.22.1`
+- recording_studio_api dummy GitHub tag `v0.17.1`
+- recording_studio_root_switchable dummy GitHub tag `v0.11.5`
+- recording_studio_metrics dummy GitHub tag `v0.7.2` (required by root_switchable, attachable, admin, and api)
+- recording_studio_logs dummy GitHub tag `v0.7.3` (required by admin and api; not on RubyGems)
+- recording_studio_trashable dummy GitHub tag `v0.12.2` (gemspec `~> 0.10`; also required by admin and api; query helpers only)
+- recording_studio_cache dummy GitHub tag `v0.6.2` (required by root_switchable)
+- flat_pack dummy GitHub tag `v0.1.341` (gemspec `>= 0.1.341` for `ButtonGroup` collapse)

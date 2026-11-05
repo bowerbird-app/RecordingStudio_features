@@ -40,6 +40,6 @@ Then open the app and sign in with:
 
 ## Why This App Exists
 
-Use this app to exercise the catalogue under an Admin root, including the admin list, image attachment, and named API. Authenticated pages use Recording Studio's shared default layout. Devise sign-in keeps `layouts/application`.
+Use this app to exercise the catalogue under an Admin root, including the admin list, image attachment, and named API. Authenticated pages use Recording Studio's shared default layout. `dummy_page_nav` sets the layout `title` and `subtitle` slots so each dummy page has one `h1`. Devise sign-in keeps `layouts/application`.
 
 The home page stays a short link into Features. Longer notes stay in the gem README.

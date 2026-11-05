@@ -2,14 +2,19 @@
 
 module RecordingStudioFeatures
   class Configuration
-    attr_reader :root_types, :hooks
+    attr_reader :root_types, :hooks, :layout
     attr_accessor :mount_path, :attachable_mount_path
 
     def initialize
       @root_types = ["AdminRoot"]
       @mount_path = "/recording_studio_features"
       @attachable_mount_path = "/recording_studio_attachable"
+      @layout = nil
       @hooks = RecordingStudio::Hooks.new
+    end
+
+    def layout=(value)
+      @layout = RecordingStudio::Layout.accept(value)
     end
 
     def to_h
@@ -17,6 +22,7 @@ module RecordingStudioFeatures
         root_types: root_types,
         mount_path: mount_path,
         attachable_mount_path: attachable_mount_path,
+        layout: layout,
         hooks_registered: hooks.instance_variable_get(:@registry).transform_values(&:size)
       }
     end

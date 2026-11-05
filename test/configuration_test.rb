@@ -11,7 +11,23 @@ class ConfigurationTest < Minitest::Test
     assert_equal ["AdminRoot"], @configuration.root_types
     assert_equal "/recording_studio_features", @configuration.mount_path
     assert_equal "/recording_studio_attachable", @configuration.attachable_mount_path
+    assert_nil @configuration.layout
     assert_instance_of RecordingStudio::Hooks, @configuration.hooks
+  end
+
+  def test_layout_accepts_core_layout_values
+    @configuration.layout = "application"
+    assert_equal "application", @configuration.layout
+
+    @configuration.layout = false
+    assert_equal false, @configuration.layout
+
+    callable = ->(controller:) { controller && "application" }
+    @configuration.layout = callable
+    assert_equal callable, @configuration.layout
+
+    assert_raises(ArgumentError) { @configuration.layout = :application_layout }
+    assert_raises(ArgumentError) { @configuration.layout = "" }
   end
 
   def test_merge_updates_known_attributes

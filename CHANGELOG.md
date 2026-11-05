@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.3.0 - 2026-11-05
+
+Requires Recording Studio `>= 6.3.0`. Dummy and development pins: core `v6.3.0`, Accessible `v0.24.1`, Admin `v2.9.1`, API `v0.17.1`, Attachable `v0.22.1`, Trashable `v0.12.2`, Metrics `v0.7.2`, Logs `v0.7.3`, Root Switchable `v0.11.5`, Cache `v0.6.2`, and FlatPack `v0.1.341`. API stays on `~> 0.17.0` so Bundler cannot pick `0.18`, which needs Moveable. `flat_pack` is `>= 0.1.341`. Rails lockfiles move to `8.1.4.1`. Sanitizer and Rack floors in both lockfiles: `rack` `>= 3.2.8`, `loofah` `>= 2.25.3`, `nokogiri` `>= 1.19.5`, `rails-html-sanitizer` `>= 1.7.2`, latest `crass`, dummy `net-ssh` `>= 7.3.5`. `view_component` stays a FlatPack transitive (`>= 4.14`).
+
+Engine controllers call `recording_studio_layout { RecordingStudioFeatures.configuration.layout }`. `layout` defaults to `nil` and is validated by `RecordingStudio::Layout.accept`. `nil` follows `RecordingStudio.configuration.layout`, then `recording_studio/default_layout`. Hard-coded `layout "recording_studio/default_layout"`, `UsesDefaultLayout`, isolated-engine view-path shims, and the stylesheet inject are gone.
+
+Show, new, and edit set `content_for :title` / `:subtitle` and `flat_pack_page_nav`. Edit, Remove image, Update, and Save sit in FlatPack `ButtonGroup` with `collapse: :menu` and `collapse_at: 390`. The dummy login card drops the removed Card `style:` argument.
+
+### Upgrade notes
+
+1. Install Features `0.3.0` with Recording Studio `>= 6.3.0` (dummy tag `v6.3.0`) and FlatPack `v0.1.341`. Stay on `0.2.2` if you are still on Recording Studio 4.
+2. Leave `config.layout` unset (`nil`) to follow the host Recording Studio layout, then core Default Layout. Set a layout name, `false`, or `->(controller:) { ... }`.
+3. Replace `include RecordingStudio::UsesDefaultLayout` and `layout "recording_studio/default_layout"` with `recording_studio_layout { RecordingStudioFeatures.configuration.layout }`.
+4. Pin API `~> 0.17.0` (dummy tag `v0.17.1`). Do not take API `0.18` unless the host already has Moveable.
+5. Match companion GitHub tags if you pin them: Accessible `v0.24.1`, Admin `v2.9.1`, Attachable `v0.22.1`, Trashable `v0.12.2`, Metrics `v0.7.2`, Logs `v0.7.3`.
+6. Rebuild Tailwind after bumping. Feature show, new, and edit headings now come from the default layout.
+
 ## 0.2.2 - 2026-11-02
 
 Admin show and edit label the image block with FlatPack `SectionTitle` (`size: :sm`, `spacing: :none`, `level: :h3`) instead of a raw paragraph. This gem now requires `flat_pack` `>= 0.1.210` for those `SectionTitle` arguments. The dummy lock stays on FlatPack `v0.1.213`.

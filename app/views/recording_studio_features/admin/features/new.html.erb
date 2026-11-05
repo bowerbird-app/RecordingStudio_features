@@ -1,16 +1,27 @@
-<div class="mx-auto flex w-full flex-col gap-6">
-  <%= render FlatPack::PageTitle::Component.new(
-    title: "New feature",
-    subtitle: "Add a title, and a subtitle or description if you want them.",
-    variant: :h1
-  ) %>
+<% content_for :title, "New feature" %>
+<% content_for :subtitle, "Add a title, and a subtitle or description if you want them." %>
+<% flat_pack_page_nav(
+  round: true,
+  style: :default,
+  back_href: features_screen_path,
+  back_tooltip: "Features"
+) %>
 
-  <%= form_with url: admin_features_path, method: :post, class: "flex w-full flex-col gap-6" do %>
+<div class="mx-auto flex min-w-0 w-full flex-col gap-6 overflow-x-auto">
+  <%= form_with url: admin_features_path, method: :post, class: "flex min-w-0 w-full flex-col gap-6" do %>
     <%= render "form", title: @title, subtitle: @subtitle, description: @description %>
-    <%= render FlatPack::Button::Component.new(
-      text: "Save",
-      style: :primary,
-      type: "submit"
-    ) %>
+    <%= render FlatPack::ButtonGroup::Component.new(
+      variant: :outlined,
+      collapse: :menu,
+      collapse_at: 390
+    ) do |group| %>
+      <% group.button(
+           FlatPack::Button::Component.new(
+             text: "Save",
+             style: :primary,
+             type: "submit"
+           )
+         ) %>
+    <% end %>
   <% end %>
 </div>

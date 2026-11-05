@@ -8,6 +8,8 @@ module RecordingStudioFeatures
       include FeatureWrites
       include FeatureQueries
 
+      helper_method :features_screen_path
+
       before_action :authenticate_user!, raise: false
       before_action :authorize_feature!
 
