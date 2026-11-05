@@ -336,7 +336,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
 
     assert_includes view_source, 'title: "Features"'
     assert_includes view_source, 'subtitle: "A catalogue of product features."'
-    assert_includes view_source, "FlatPack::PageTitle::Component"
+    refute_includes view_source, "FlatPack::PageTitle::Component"
     assert_includes view_source, "FlatPack::Button::Component"
     assert_includes view_source, "/admin/screens/recording_studio_features"
     assert_includes view_source, "dummy_page_nav"
@@ -353,7 +353,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
       view_source = File.read(view_path)
 
       assert_includes view_source, "dummy_page_nav"
-      assert_includes view_source, "FlatPack::PageTitle::Component"
+      refute_includes view_source, "FlatPack::PageTitle::Component"
       refute_includes view_source, "FlatPack::Card::Component"
       refute_includes view_source, "FlatPack::Breadcrumb::Component"
     end

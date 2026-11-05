@@ -24,7 +24,7 @@ class DocsControllerTest < ActionDispatch::IntegrationTest
   test "install page renders successfully" do
     get docs_install_path
     assert_response :success
-    assert_select "h1", text: "Install"
+    assert_select "h1", text: "Install", count: 1
     assert_includes response.body, "Step 1"
     assert_includes response.body, "Provide one section title for each step"
     assert_includes response.body, "# Put the step instruction here."
@@ -33,7 +33,7 @@ class DocsControllerTest < ActionDispatch::IntegrationTest
   test "config page renders successfully" do
     get docs_config_path
     assert_response :success
-    assert_select "h1", text: "Config"
+    assert_select "h1", text: "Config", count: 1
     expected_placeholder = "Replace this placeholder with the configuration settings your generated gem exposes."
 
     assert_includes response.body, expected_placeholder
@@ -47,7 +47,7 @@ class DocsControllerTest < ActionDispatch::IntegrationTest
     response_text = response.body.gsub(/\s+/, " ").strip
 
     assert_response :success
-    assert_select "h1", text: "Recordable types"
+    assert_select "h1", text: "Recordable types", count: 1
     assert_includes(
       response.body,
       "The list below comes from RecordingStudio.recordable_declarations and parent/root introspection."
@@ -82,7 +82,7 @@ class DocsControllerTest < ActionDispatch::IntegrationTest
     get docs_recordings_tree_path
 
     assert_response :success
-    assert_select "h1", text: "Recordings tree"
+    assert_select "h1", text: "Recordings tree", count: 1
     assert_includes response.body, "Workspace: Tree Workspace"
     assert_includes response.body, "Folder: Reference"
     assert_includes response.body, "Page: API"
@@ -97,7 +97,7 @@ class DocsControllerTest < ActionDispatch::IntegrationTest
   test "gem_views page renders successfully" do
     get docs_gem_views_path
     assert_response :success
-    assert_select "h1", text: "Gem Views"
+    assert_select "h1", text: "Gem Views", count: 1
     assert_select "table", minimum: 1
     refute_includes response.body, "app/views/recording_studio_features/home/index.html.erb"
   end
@@ -105,7 +105,7 @@ class DocsControllerTest < ActionDispatch::IntegrationTest
   test "methods page renders successfully" do
     get docs_methods_path
     assert_response :success
-    assert_select "h1", text: "Methods"
+    assert_select "h1", text: "Methods", count: 1
     assert_includes response.body, "Document the public methods your addon exposes."
     assert_includes response.body, "Example method"
     assert_includes response.body, "recordingstudio_addon.example_method"

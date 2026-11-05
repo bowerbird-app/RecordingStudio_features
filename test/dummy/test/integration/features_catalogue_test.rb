@@ -2,6 +2,8 @@
 
 require "test_helper"
 require "devise/test/integration_helpers"
+require "base64"
+require "digest"
 
 class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
@@ -70,7 +72,7 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     assert_equal "Search", revised.recordable.title
   end
 
-  test "attach and remove an image" do
+  test "attach replace and remove an image" do
     recording = record_feature(title: "With image")
     attachment = recording.import_attachment(
       io: File.open(png_path),
@@ -83,18 +85,34 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     assert_equal recording, attachment.parent_recording
     assert_equal attachment, RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording)
 
-    attachment.remove_attachment(actor: @user)
-
-    assert_nil RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording.reload)
-
-    recording.import_attachment(
+    replacement_source = record_feature(title: "Replacement source")
+    replacement_attachment = replacement_source.import_attachment(
       io: File.open(png_path),
-      filename: "again.png",
+      filename: "replacement.png",
       content_type: "image/png",
       actor: @user
     )
+    replacement_bytes = File.binread(png_path)
+    replacement_blob = RecordingStudioAttachable::DirectUpload.prepare!(
+      recording: recording,
+      actor: @user,
+      filename: replacement_attachment.recordable.file.filename.to_s,
+      byte_size: replacement_bytes.bytesize,
+      checksum: Base64.strict_encode64(Digest::MD5.digest(replacement_bytes)),
+      content_type: "image/png"
+    )
+    replacement_blob.upload(StringIO.new(replacement_bytes))
+    replaced = attachment.replace_attachment_file(
+      signed_blob_id: RecordingStudioAttachable::DirectUpload.sign(replacement_blob),
+      actor: @user
+    )
 
-    refute_nil RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording.reload)
+    assert_equal attachment.id, replaced.id
+    assert_equal "replacement.png", replaced.reload.recordable.file.filename.to_s
+
+    replaced.remove_attachment(actor: @user)
+
+    assert_nil RecordingStudioAttachable::AttachmentFileButton.attachment_recording_for(recording.reload)
   end
 
   test "destroy removes the feature recording when an image child exists and leaves the snapshot" do
