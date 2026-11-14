@@ -8,7 +8,7 @@ Feature lists use `RecordingStudio::Recording.kept`. The catalogue no longer che
 
 1. Install Recording Studio `>= 6.14.0` (dummy tag `v6.14.0`).
 2. Run Recording Studio's events `root_recording_id` migration if it is not already applied. Copy `20261114090000_add_root_recording_id_to_recording_studio_events`.
-3. Set `config.authorize_write`, or `allow_unauthorized_writes`, the way Recording Studio 6.5 and later require for writes.
+3. Set `config.authorize_write`, or `allow_unauthorized_writes`, the way Recording Studio 6.5 and later require for writes. The dummy sets `allow_unauthorized_writes` so docs pages can record without an actor.
 4. A kept list excludes trashed rows when an addon registers a recording filter. This gem does not call `recording_studio_trashable_kept_sql`, `recording_studio_trashable_active`, `recording_studio_trashable_including_trashed`, or `recording_studio_trashable_trashed_sql`.
 
 ## 0.3.0 - 2026-11-05

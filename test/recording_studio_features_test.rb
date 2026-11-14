@@ -292,7 +292,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes initializer_source, '"RecordingStudioAttachable::Library"'
     refute_includes initializer_source, '"RecordingStudioAttachable::Placement"'
     assert_includes initializer_source, '"AdminRoot"'
-    assert_includes initializer_source, "config.authorize_write = ->(actor:, **) { actor.present? }"
+    assert_includes initializer_source, "config.allow_unauthorized_writes = true"
     refute_includes initializer_source, "config.include_children"
     refute_includes initializer_source, "config.features."
     refute_includes initializer_source, "v3"

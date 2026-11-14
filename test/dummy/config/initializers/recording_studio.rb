@@ -15,7 +15,7 @@ RecordingStudio.configure do |config|
   config.app_name = "Features" if config.respond_to?(:app_name=)
 
   config.actor = -> { Current.actor }
-  config.authorize_write = ->(actor:, **) { actor.present? }
+  config.allow_unauthorized_writes = true
 
   config.event_notifications_enabled = true
 
