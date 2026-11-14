@@ -2,14 +2,16 @@
 
 ## 0.3.1 - 2026-11-14
 
-Feature lists use `RecordingStudio::Recording.kept`. The catalogue no longer checks for a `trashed_at` column or calls Trashable kept SQL. Requires `recording_studio` `>= 6.14.0`. Development and dummy pins move to tag `v6.14.0`. The Trashable pin stays `v0.12.2`.
+Feature lists use `RecordingStudio::Recording.kept`. The catalogue no longer checks for a `trashed_at` column or calls Trashable kept SQL. Requires `recording_studio` `>= 6.14.0`, `recording_studio_accessible` `~> 0.11`, `>= 0.42.0`, and `recording_studio_trashable` `~> 0.10`, `>= 0.16.0`. API moves to `~> 0.23.0` because Accessible 0.42 registers capability actions with `openapi_for`. That API line requires Moveable `~> 4.0`. Development and dummy pins: Recording Studio `v6.14.0`, Accessible `v0.42.0`, Trashable `v0.16.0`, API `v0.23.0`, Moveable `v4.1.1`, Icons `v0.2.1`.
 
 ### Upgrade notes
 
 1. Install Recording Studio `>= 6.14.0` (dummy tag `v6.14.0`).
-2. Run Recording Studio's events `root_recording_id` migration if it is not already applied. Copy `20261114090000_add_root_recording_id_to_recording_studio_events`.
-3. Set `config.authorize_write`, or `allow_unauthorized_writes`, the way Recording Studio 6.5 and later require for writes. The dummy sets `allow_unauthorized_writes` so docs pages can record without an actor.
-4. A kept list excludes trashed rows when an addon registers a recording filter. This gem does not call `recording_studio_trashable_kept_sql`, `recording_studio_trashable_active`, `recording_studio_trashable_including_trashed`, or `recording_studio_trashable_trashed_sql`.
+2. Install Accessible `>= 0.42.0` (dummy tag `v0.42.0`) and Trashable `>= 0.16.0` (dummy tag `v0.16.0`). No new Features migration.
+3. Install API `~> 0.23.0` (dummy tag `v0.23.0`), Moveable `~> 4.0` (dummy tag `v4.1.1`), and Icons `v0.2.1`. API `0.17` cannot boot with Accessible 0.42.
+4. Run Recording Studio's events `root_recording_id` migration if it is not already applied. Copy `20261114090000_add_root_recording_id_to_recording_studio_events`.
+5. Set `config.authorize_write`, or `allow_unauthorized_writes`, the way Recording Studio 6.5 and later require for writes. The dummy sets `allow_unauthorized_writes` so docs pages can record without an actor.
+6. A kept list excludes trashed rows when an addon registers a recording filter. Trashable 0.16 registers that filter. This gem does not call `recording_studio_trashable_kept_sql`, `recording_studio_trashable_active`, `recording_studio_trashable_including_trashed`, or `recording_studio_trashable_trashed_sql`. API 0.23 still calls `recording_studio_trashable_kept_sql`. The dummy defines that method as `RecordingStudio.kept_sql` until API stops.
 
 ## 0.3.0 - 2026-11-05
 

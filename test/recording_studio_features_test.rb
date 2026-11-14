@@ -59,8 +59,11 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes gemspec, 'spec.add_dependency "recording_studio", ">= 6.14.0"'
     refute_includes gemspec, 'spec.add_dependency "recording_studio", ">= 6.3.0"'
     refute_includes gemspec, 'spec.add_dependency "recording_studio", "~> 4.2"'
-    assert_includes gemspec, 'spec.add_dependency "recording_studio_api", "~> 0.17.0"'
-    assert_includes gemspec, 'spec.add_dependency "recording_studio_trashable", "~> 0.10"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio_api", "~> 0.23.0"'
+    refute_includes gemspec, 'spec.add_dependency "recording_studio_api", "~> 0.17.0"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio_moveable", "~> 4.0"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio_accessible", "~> 0.11", ">= 0.42.0"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio_trashable", "~> 0.10", ">= 0.16.0"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio_admin", "~> 2.0"'
   end
 
@@ -153,15 +156,20 @@ class RecordingStudioFeaturesTest < Minitest::Test
 
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v6.14.0"'
     refute_includes gemfile, 'tag: "v6.3.0"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.24.1"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.42.0"'
+    refute_includes gemfile, 'tag: "v0.24.1"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.9.1"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.22.1"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.17.1"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_api", tag: "v0.23.0"'
+    refute_includes gemfile, 'tag: "v0.17.1"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_moveable", tag: "v4.1.1"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_icons", tag: "v0.2.1"'
     assert_includes gemfile, 'gem "redis", "~> 5.3"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_root_switchable", tag: "v0.11.5"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_metrics", tag: "v0.7.2"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_logs", tag: "v0.7.3"'
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_trashable", tag: "v0.12.2"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_trashable", tag: "v0.16.0"'
+    refute_includes gemfile, 'tag: "v0.12.2"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_cache", tag: "v0.6.2"'
     assert_includes gemfile, 'github: "bowerbird-app/flatpack", tag: "v0.1.341"'
     refute_includes gemfile, "recording_studio/v3.0.0"
@@ -293,6 +301,9 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes initializer_source, '"RecordingStudioAttachable::Placement"'
     assert_includes initializer_source, '"AdminRoot"'
     assert_includes initializer_source, "config.allow_unauthorized_writes = true"
+    bridge = File.read(File.expand_path("dummy/config/initializers/recording_kept_sql_bridge.rb", __dir__))
+    assert_includes bridge, "def recording_studio_trashable_kept_sql(table = table_name)"
+    assert_includes bridge, "RecordingStudio.kept_sql(table)"
     refute_includes initializer_source, "config.include_children"
     refute_includes initializer_source, "config.features."
     refute_includes initializer_source, "v3"
@@ -315,15 +326,20 @@ class RecordingStudioFeaturesTest < Minitest::Test
     assert_includes readme, "recording_studio dummy GitHub tag `v6.14.0`"
     refute_includes readme, "recording_studio dummy GitHub tag `v6.3.0`"
     assert_includes readme, "flat_pack dummy GitHub tag `v0.1.341`"
-    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.24.1`"
+    assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.42.0`"
+    refute_includes readme, "recording_studio_accessible dummy GitHub tag `v0.24.1`"
     assert_includes readme, "recording_studio_admin dummy GitHub tag `v2.9.1`"
     assert_includes readme, "recording_studio_attachable dummy GitHub tag `v0.22.1`"
-    assert_includes readme, "recording_studio_api dummy GitHub tag `v0.17.1`"
+    assert_includes readme, "recording_studio_api dummy GitHub tag `v0.23.0`"
+    refute_includes readme, "recording_studio_api dummy GitHub tag `v0.17.1`"
+    assert_includes readme, "recording_studio_moveable dummy GitHub tag `v4.1.1`"
+    assert_includes readme, "recording_studio_icons dummy GitHub tag `v0.2.1`"
     assert_includes readme, "recording_studio_root_switchable dummy GitHub tag `v0.11.5`"
     assert_includes readme, "recording_studio_cache dummy GitHub tag `v0.6.2`"
     assert_includes readme, "recording_studio_metrics dummy GitHub tag `v0.7.2`"
     assert_includes readme, "recording_studio_logs dummy GitHub tag `v0.7.3`"
-    assert_includes readme, "recording_studio_trashable dummy GitHub tag `v0.12.2`"
+    assert_includes readme, "recording_studio_trashable dummy GitHub tag `v0.16.0`"
+    refute_includes readme, "recording_studio_trashable dummy GitHub tag `v0.12.2`"
     refute_includes readme, "recording_studio dummy GitHub tag `v4.7.0`"
     refute_includes readme, "recording_studio dummy GitHub tag `v4.5.0`"
     refute_includes readme, "dummy GitHub tag `v4.2.2`"
