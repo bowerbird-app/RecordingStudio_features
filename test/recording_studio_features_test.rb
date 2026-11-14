@@ -4,13 +4,13 @@ require "test_helper"
 
 class RecordingStudioFeaturesTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.3.0", ::RecordingStudioFeatures::VERSION
+    assert_equal "0.3.1", ::RecordingStudioFeatures::VERSION
 
     root = File.expand_path("..", __dir__)
     ["Gemfile.lock", "test/dummy/Gemfile.lock"].each do |relative|
       lockfile = File.read(File.join(root, relative))
 
-      assert_includes lockfile, "recording_studio_features (0.3.0)", relative
+      assert_includes lockfile, "recording_studio_features (0.3.1)", relative
     end
   end
 
@@ -56,11 +56,21 @@ class RecordingStudioFeaturesTest < Minitest::Test
 
     assert_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.341"'
     refute_includes gemspec, 'spec.add_dependency "flat_pack", ">= 0.1.210"'
-    assert_includes gemspec, 'spec.add_dependency "recording_studio", ">= 6.3.0"'
+    assert_includes gemspec, 'spec.add_dependency "recording_studio", ">= 6.14.0"'
+    refute_includes gemspec, 'spec.add_dependency "recording_studio", ">= 6.3.0"'
     refute_includes gemspec, 'spec.add_dependency "recording_studio", "~> 4.2"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio_api", "~> 0.17.0"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio_trashable", "~> 0.10"'
     assert_includes gemspec, 'spec.add_dependency "recording_studio_admin", "~> 2.0"'
+  end
+
+  def test_feature_catalogue_uses_core_kept_scope
+    source = File.read(File.expand_path("../lib/recording_studio_features/feature_catalogue.rb", __dir__))
+
+    assert_includes source, "RecordingStudio::Recording.kept"
+    refute_includes source, "recording_studio_trashable"
+    refute_includes source, "trashed_at"
+    refute_includes source, "column_names"
   end
 
   def test_engine_controller_uses_recording_studio_layout
@@ -141,7 +151,8 @@ class RecordingStudioFeaturesTest < Minitest::Test
   def test_dummy_gemfile_pins_verified_6x_github_tags
     gemfile = File.read(File.expand_path("dummy/Gemfile", __dir__))
 
-    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v6.3.0"'
+    assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio", tag: "v6.14.0"'
+    refute_includes gemfile, 'tag: "v6.3.0"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.24.1"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_admin", tag: "v2.9.1"'
     assert_includes gemfile, 'github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.22.1"'
@@ -281,6 +292,7 @@ class RecordingStudioFeaturesTest < Minitest::Test
     refute_includes initializer_source, '"RecordingStudioAttachable::Library"'
     refute_includes initializer_source, '"RecordingStudioAttachable::Placement"'
     assert_includes initializer_source, '"AdminRoot"'
+    assert_includes initializer_source, "config.authorize_write = ->(actor:, **) { actor.present? }"
     refute_includes initializer_source, "config.include_children"
     refute_includes initializer_source, "config.features."
     refute_includes initializer_source, "v3"
@@ -300,7 +312,8 @@ class RecordingStudioFeaturesTest < Minitest::Test
     readme = File.read(File.expand_path("../README.md", __dir__))
 
     assert_includes readme, "RecordingStudio"
-    assert_includes readme, "recording_studio dummy GitHub tag `v6.3.0`"
+    assert_includes readme, "recording_studio dummy GitHub tag `v6.14.0`"
+    refute_includes readme, "recording_studio dummy GitHub tag `v6.3.0`"
     assert_includes readme, "flat_pack dummy GitHub tag `v0.1.341`"
     assert_includes readme, "recording_studio_accessible dummy GitHub tag `v0.24.1`"
     assert_includes readme, "recording_studio_admin dummy GitHub tag `v2.9.1`"

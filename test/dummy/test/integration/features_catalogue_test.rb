@@ -149,6 +149,12 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
   end
 
   test "admin list and show only include kept features" do
+    require "recording_studio_trashable/query"
+    # Trashable 0.12 does not register a core kept filter. This example does.
+    RecordingStudio.register_recording_filter(:trashable, sql: ->(table) { "#{table}.trashed_at IS NULL" }) do |recordings|
+      recordings.where(trashed_at: nil)
+    end
+
     kept = record_feature(title: "Kept feature")
     voided = record_feature(title: "Voided feature")
     RecordingStudioTrashable.void_recording!(voided)
@@ -171,6 +177,8 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     get "/recording_studio_features/admin/features/#{voided.id}"
 
     assert_response :not_found
+  ensure
+    RecordingStudio.unregister_recording_filter(:trashable)
   end
 
   test "catalogue returns none without a root" do

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.3.1 - 2026-11-14
+
+Feature lists use `RecordingStudio::Recording.kept`. The catalogue no longer checks for a `trashed_at` column or calls Trashable kept SQL. Requires `recording_studio` `>= 6.14.0`. Development and dummy pins move to tag `v6.14.0`. The Trashable pin stays `v0.12.2`.
+
+### Upgrade notes
+
+1. Install Recording Studio `>= 6.14.0` (dummy tag `v6.14.0`).
+2. Run Recording Studio's events `root_recording_id` migration if it is not already applied. Copy `20261114090000_add_root_recording_id_to_recording_studio_events`.
+3. Set `config.authorize_write`, or `allow_unauthorized_writes`, the way Recording Studio 6.5 and later require for writes.
+4. A kept list excludes trashed rows when an addon registers a recording filter. This gem does not call `recording_studio_trashable_kept_sql`, `recording_studio_trashable_active`, `recording_studio_trashable_including_trashed`, or `recording_studio_trashable_trashed_sql`.
+
 ## 0.3.0 - 2026-11-05
 
 Requires Recording Studio `>= 6.3.0`. Dummy and development pins: core `v6.3.0`, Accessible `v0.24.1`, Admin `v2.9.1`, API `v0.17.1`, Attachable `v0.22.1`, Trashable `v0.12.2`, Metrics `v0.7.2`, Logs `v0.7.3`, Root Switchable `v0.11.5`, Cache `v0.6.2`, and FlatPack `v0.1.341`. API stays on `~> 0.17.0` so Bundler cannot pick `0.18`, which needs Moveable. `flat_pack` is `>= 0.1.341`. Rails lockfiles move to `8.1.4.1`. Sanitizer and Rack floors in both lockfiles: `rack` `>= 3.2.8`, `loofah` `>= 2.25.3`, `nokogiri` `>= 1.19.5`, `rails-html-sanitizer` `>= 1.7.2`, latest `crass`, dummy `net-ssh` `>= 7.3.5`. `view_component` stays a FlatPack transitive (`>= 4.14`).

@@ -121,7 +121,7 @@ Show, new, and edit set the page heading with `content_for :title` and `:subtitl
 
 ## Dummy pins
 
-- recording_studio dummy GitHub tag `v6.3.0`
+- recording_studio dummy GitHub tag `v6.14.0`
 - recording_studio_accessible dummy GitHub tag `v0.24.1`
 - recording_studio_admin dummy GitHub tag `v2.9.1`
 - recording_studio_attachable dummy GitHub tag `v0.22.1`
