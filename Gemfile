@@ -9,11 +9,11 @@ gem "recording_studio", github: "bowerbird-app/RecordingStudio", tag: "v6.14.0"
 gem "recording_studio_accessible", github: "bowerbird-app/RecordingStudio_accessible", tag: "v0.42.0"
 gem "recording_studio_admin", github: "bowerbird-app/RecordingStudio_admin", tag: "v2.9.1"
 gem "recording_studio_api", github: "bowerbird-app/RecordingStudio_api", tag: "v0.23.0"
-gem "recording_studio_moveable", github: "bowerbird-app/RecordingStudio_moveable", tag: "v4.1.1",
-                                 require: false
+gem "recording_studio_attachable", github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.22.1"
 gem "recording_studio_icons", github: "bowerbird-app/RecordingStudio_icons", tag: "v0.2.1",
                               require: false
-gem "recording_studio_attachable", github: "bowerbird-app/RecordingStudio_attachable", tag: "v0.22.1"
+gem "recording_studio_moveable", github: "bowerbird-app/RecordingStudio_moveable", tag: "v4.1.1",
+                                 require: false
 # Required by admin >= 2.6 and api >= 0.14 (not on RubyGems)
 gem "recording_studio_logs", github: "bowerbird-app/RecordingStudio_logs", tag: "v0.7.3",
                              require: false
