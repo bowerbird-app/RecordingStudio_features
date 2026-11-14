@@ -121,14 +121,16 @@ Show, new, and edit set the page heading with `content_for :title` and `:subtitl
 
 ## Dummy pins
 
-- recording_studio dummy GitHub tag `v6.3.0`
-- recording_studio_accessible dummy GitHub tag `v0.24.1`
+- recording_studio dummy GitHub tag `v6.14.0`
+- recording_studio_accessible dummy GitHub tag `v0.42.0` (gemspec `~> 0.11`, `>= 0.42.0`)
 - recording_studio_admin dummy GitHub tag `v2.9.1`
 - recording_studio_attachable dummy GitHub tag `v0.22.1`
-- recording_studio_api dummy GitHub tag `v0.17.1`
+- recording_studio_api dummy GitHub tag `v0.23.0` (gemspec `~> 0.23.0`; Accessible 0.42 passes `openapi_for`)
+- recording_studio_moveable dummy GitHub tag `v4.1.1` (gemspec `~> 4.0`; required by API 0.23)
+- recording_studio_icons dummy GitHub tag `v0.2.1` (required by moveable; not on RubyGems)
 - recording_studio_root_switchable dummy GitHub tag `v0.11.5`
 - recording_studio_metrics dummy GitHub tag `v0.7.2` (required by root_switchable, attachable, admin, and api)
 - recording_studio_logs dummy GitHub tag `v0.7.3` (required by admin and api; not on RubyGems)
-- recording_studio_trashable dummy GitHub tag `v0.12.2` (gemspec `~> 0.10`; also required by admin and api; query helpers only)
+- recording_studio_trashable dummy GitHub tag `v0.16.0` (gemspec `~> 0.10`, `>= 0.16.0`; also required by admin and api; query helpers only)
 - recording_studio_cache dummy GitHub tag `v0.6.2` (required by root_switchable)
 - flat_pack dummy GitHub tag `v0.1.341` (gemspec `>= 0.1.341` for `ButtonGroup` collapse)

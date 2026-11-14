@@ -149,6 +149,8 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
   end
 
   test "admin list and show only include kept features" do
+    require "recording_studio_trashable/query"
+
     kept = record_feature(title: "Kept feature")
     voided = record_feature(title: "Voided feature")
     RecordingStudioTrashable.void_recording!(voided)
