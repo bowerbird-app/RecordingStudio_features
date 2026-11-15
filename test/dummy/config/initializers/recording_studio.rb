@@ -15,7 +15,10 @@ RecordingStudio.configure do |config|
   config.app_name = "Features" if config.respond_to?(:app_name=)
 
   config.actor = -> { Current.actor }
-  config.allow_unauthorized_writes = true
+  # Recording Studio 7 denies record! and create_root_recording! unless an
+  # authorizer is set. A present actor may write, including a new root where
+  # root_recording is nil.
+  config.authorize_write = ->(actor:, **) { actor.present? }
 
   config.event_notifications_enabled = true
 

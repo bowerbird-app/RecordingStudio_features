@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.4.0 - 2026-11-15
+
+Requires Recording Studio `>= 7.0`, `< 8.0`. `root_recording_for` only finds a root. Seeds and tests that created one now call `create_root_recording!(recordable, actor:)`. The dummy sets `config.authorize_write` to allow a write when an actor is present, including a new root where `root_recording` is nil. It does not set `allow_unauthorized_writes`.
+
+Gemspec: `recording_studio_api` `>= 0.24.0`, `< 1.0`; `recording_studio_moveable` `>= 5.0`, `< 6.0`; `recording_studio_attachable` `>= 0.28.0`, `< 1.0`; `recording_studio_accessible` `>= 0.44.0`, `< 1.0`; `recording_studio_trashable` `>= 0.17.0`, `< 1.0`; `recording_studio_admin` `>= 2.16.0`. `flat_pack` stays `>= 0.1.341`. Attachable 0.28 requires FlatPack `>= 0.1.376`, so the dummy pin is `v0.1.376`.
+
+Development and dummy pins: Recording Studio `v7.0.0`, API `v0.24.0`, Moveable `v5.0.0`, Attachable `v0.28.0`, Accessible `v0.44.0`, Admin `v2.16.0`, Trashable `v0.17.0`, Metrics `v0.9.0`, Icons `v0.2.1`, FlatPack `v0.1.376`. Logs moves to `v0.8.0` because API 0.24 requires `>= 0.8.0`. Root Switchable moves to `v0.16.0` because `v0.11.5` cannot resolve with core 7. Cache moves to `v0.6.3`. Bundler Audit pins: `puma` `8.1.0`, `msgpack` `>= 1.8.7`.
+
+Feature lists stay on `RecordingStudio::Recording.kept`. The dummy no longer defines `recording_studio_trashable_kept_sql`. API 0.24 calls `Recording.kept` and `RecordingStudio.kept_sql`. Admin uses `access_recording_resolver`. `site_admin_recording_resolver` is gone.
+
+`Recording#destroy!` still prepends a release of image children. Core 7 keeps `child_recordings` as `dependent: :restrict_with_error`, and Trashable 0.17 does not override `destroy!`.
+
+The dummy already includes core migration `20261114090000_add_root_recording_id_to_recording_studio_events`. No new Features migration.
+
+### Upgrade notes
+
+1. Install Features `0.4.0` with Recording Studio `>= 7.0`, `< 8.0` (tag `v7.0.0`).
+2. Install API `>= 0.24.0`, `< 1.0` (tag `v0.24.0`), Moveable `>= 5.0`, `< 6.0` (tag `v5.0.0`), and Attachable `>= 0.28.0`, `< 1.0` (tag `v0.28.0`).
+3. Install Accessible `>= 0.44.0`, `< 1.0` (tag `v0.44.0`), Trashable `>= 0.17.0`, `< 1.0` (tag `v0.17.0`), and Admin `>= 2.16.0` (tag `v2.16.0`).
+4. Pin Logs `v0.8.0`, Metrics `v0.9.0`, Icons `v0.2.1`, FlatPack `v0.1.376`, and, when the host uses them, Root Switchable `v0.16.0` and Cache `v0.6.3`.
+5. Replace creating `root_recording_for` calls with `create_root_recording!(recordable, actor:)`. Leave lookups on `root_recording_for` and handle `nil`.
+6. Set `config.authorize_write` and pass an actor. `create_root_recording!` calls the authorizer with `root_recording` nil. Do not set `allow_unauthorized_writes`.
+7. Copy `20261114090000_add_root_recording_id_to_recording_studio_events` when `recording_studio_events` has no `root_recording_id`.
+8. Delete a host `recording_studio_trashable_kept_sql` bridge. Call `RecordingStudio::Recording.kept` or `RecordingStudio.kept_sql`.
+9. Point Admin at `access_recording_resolver`. Delete `site_admin_recording_resolver`.
+10. Pin `puma` `8.1.0` and `msgpack` `>= 1.8.7` so Bundler Audit stays clean.
+
 ## 0.3.1 - 2026-11-14
 
 Feature lists use `RecordingStudio::Recording.kept`. The catalogue no longer checks for a `trashed_at` column or calls Trashable kept SQL. Requires `recording_studio` `>= 6.14.0`, `recording_studio_accessible` `~> 0.11`, `>= 0.42.0`, and `recording_studio_trashable` `~> 0.10`, `>= 0.16.0`. API moves to `~> 0.23.0` because Accessible 0.42 registers capability actions with `openapi_for`. That API line requires Moveable `~> 4.0`. Development and dummy pins: Recording Studio `v6.14.0`, Accessible `v0.42.0`, Trashable `v0.16.0`, API `v0.23.0`, Moveable `v4.1.1`, Icons `v0.2.1`.

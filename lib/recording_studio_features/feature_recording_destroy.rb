@@ -2,8 +2,10 @@
 
 module RecordingStudioFeatures
   module FeatureRecordingDestroy
-    # API destroy calls Recording#destroy!, and restrict_with_error blocks that
-    # while an image attachment is still a child. Release those children first.
+    # API and admin destroy call Recording#destroy!. Core 7 still declares
+    # child_recordings dependent: :restrict_with_error, so an image attachment
+    # still blocks that. Release those children first. Trashable does not
+    # override destroy!.
     def destroy!(...)
       if recordable_type == "RecordingStudioFeatures::Feature" &&
          !instance_variable_defined?(:@recording_studio_features_releasing)

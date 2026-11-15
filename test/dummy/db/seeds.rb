@@ -49,16 +49,16 @@ Current.actor = user
 
 begin
   # Create the root recording
-  root_recording = RecordingStudio.root_recording_for(workspace)
-  accessible_root_recording = RecordingStudio.root_recording_for(accessible_workspace)
-  private_root_recording = RecordingStudio.root_recording_for(private_workspace)
+  root_recording = RecordingStudio.create_root_recording!(workspace, actor: user)
+  accessible_root_recording = RecordingStudio.create_root_recording!(accessible_workspace, actor: user)
+  private_root_recording = RecordingStudio.create_root_recording!(private_workspace, actor: user)
 
   folder_recording = find_or_record_child.call(folder, root_recording, root_recording)
 
   find_or_record_child.call(page, root_recording, folder_recording)
 
   admin_root = AdminRoot.find_or_create_by!(name: "Admin")
-  admin_root_recording = RecordingStudio.root_recording_for(admin_root)
+  admin_root_recording = RecordingStudio.create_root_recording!(admin_root, actor: user)
   ensure_owner.call(user, admin_root_recording)
 
   catalogue = find_feature.call(admin_root_recording, "Catalogue")

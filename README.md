@@ -121,16 +121,16 @@ Show, new, and edit set the page heading with `content_for :title` and `:subtitl
 
 ## Dummy pins
 
-- recording_studio dummy GitHub tag `v6.14.0`
-- recording_studio_accessible dummy GitHub tag `v0.42.0` (gemspec `~> 0.11`, `>= 0.42.0`)
-- recording_studio_admin dummy GitHub tag `v2.9.1`
-- recording_studio_attachable dummy GitHub tag `v0.22.1`
-- recording_studio_api dummy GitHub tag `v0.23.0` (gemspec `~> 0.23.0`; Accessible 0.42 passes `openapi_for`)
-- recording_studio_moveable dummy GitHub tag `v4.1.1` (gemspec `~> 4.0`; required by API 0.23)
+- recording_studio dummy GitHub tag `v7.0.0` (gemspec `>= 7.0`, `< 8.0`)
+- recording_studio_accessible dummy GitHub tag `v0.44.0` (gemspec `>= 0.44.0`, `< 1.0`)
+- recording_studio_admin dummy GitHub tag `v2.16.0` (gemspec `>= 2.16.0`; `access_recording_resolver`)
+- recording_studio_attachable dummy GitHub tag `v0.28.0` (gemspec `>= 0.28.0`, `< 1.0`)
+- recording_studio_api dummy GitHub tag `v0.24.0` (gemspec `>= 0.24.0`, `< 1.0`)
+- recording_studio_moveable dummy GitHub tag `v5.0.0` (gemspec `>= 5.0`, `< 6.0`; required by API 0.24)
 - recording_studio_icons dummy GitHub tag `v0.2.1` (required by moveable; not on RubyGems)
-- recording_studio_root_switchable dummy GitHub tag `v0.11.5`
-- recording_studio_metrics dummy GitHub tag `v0.7.2` (required by root_switchable, attachable, admin, and api)
-- recording_studio_logs dummy GitHub tag `v0.7.3` (required by admin and api; not on RubyGems)
-- recording_studio_trashable dummy GitHub tag `v0.16.0` (gemspec `~> 0.10`, `>= 0.16.0`; also required by admin and api; query helpers only)
-- recording_studio_cache dummy GitHub tag `v0.6.2` (required by root_switchable)
-- flat_pack dummy GitHub tag `v0.1.341` (gemspec `>= 0.1.341` for `ButtonGroup` collapse)
+- recording_studio_root_switchable dummy GitHub tag `v0.16.0` (`v0.11.5` cannot resolve with core 7)
+- recording_studio_metrics dummy GitHub tag `v0.9.0` (required by root_switchable, attachable, admin, and api)
+- recording_studio_logs dummy GitHub tag `v0.8.0` (required by admin and api; API 0.24 requires `>= 0.8.0`)
+- recording_studio_trashable dummy GitHub tag `v0.17.0` (gemspec `>= 0.17.0`, `< 1.0`; query helpers only)
+- recording_studio_cache dummy GitHub tag `v0.6.3` (required by root_switchable)
+- flat_pack dummy GitHub tag `v0.1.376` (gemspec `>= 0.1.341`; Attachable 0.28 requires `>= 0.1.376`)

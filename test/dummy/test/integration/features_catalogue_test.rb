@@ -15,7 +15,7 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
     end
     Current.actor = @user
     @admin_root = AdminRoot.create!(name: "Features Admin #{SecureRandom.hex(4)}")
-    @admin_root_recording = RecordingStudio.root_recording_for(@admin_root)
+    @admin_root_recording = RecordingStudio.create_root_recording!(@admin_root, actor: @user)
     result = RecordingStudioAccessible.bootstrap_owner_access!(recording: @admin_root_recording, actor: @user)
     raise result.error if result.failure?
   end
@@ -49,7 +49,7 @@ class FeaturesCatalogueTest < ActionDispatch::IntegrationTest
 
   test "a feature cannot be recorded under Workspace" do
     workspace = Workspace.create!(name: "Not a feature root #{SecureRandom.hex(4)}")
-    workspace_recording = RecordingStudio.root_recording_for(workspace)
+    workspace_recording = RecordingStudio.create_root_recording!(workspace, actor: @user)
 
     assert_equal ["AdminRoot"], RecordingStudioFeatures.configuration.root_types
     assert_raises(RecordingStudio::InvalidParent) do
