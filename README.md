@@ -134,3 +134,5 @@ Show, new, and edit set the page heading with `content_for :title` and `:subtitl
 - recording_studio_trashable dummy GitHub tag `v0.17.0` (gemspec `>= 0.17.0`, `< 1.0`; query helpers only)
 - recording_studio_cache dummy GitHub tag `v0.6.3` (required by root_switchable)
 - flat_pack dummy GitHub tag `v0.1.376` (gemspec `>= 0.1.341`; Attachable 0.28 requires `>= 0.1.376`)
+
+The dummy switcher lists every workspace and admin root. Root Switchable 0.16 requires Accessible `:view` on the current root. The default is the first listed root the signed-in actor can view. Seeds grant `admin@admin.com` owner on each workspace root and the admin root.

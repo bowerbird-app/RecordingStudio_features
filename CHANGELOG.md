@@ -12,6 +12,8 @@ Feature lists stay on `RecordingStudio::Recording.kept`. The dummy no longer def
 
 `Recording#destroy!` still prepends a release of image children. Core 7 keeps `child_recordings` as `dependent: :restrict_with_error`, and Trashable 0.17 does not override `destroy!`.
 
+Root Switchable 0.16 refuses the switch page unless the actor can view the current root. The dummy default root is the first listed root that actor can view, then the first root. Seeds grant the demo user owner on each workspace root and the admin root.
+
 The dummy already includes core migration `20261114090000_add_root_recording_id_to_recording_studio_events`. No new Features migration.
 
 ### Upgrade notes
@@ -26,6 +28,7 @@ The dummy already includes core migration `20261114090000_add_root_recording_id_
 8. Delete a host `recording_studio_trashable_kept_sql` bridge. Call `RecordingStudio::Recording.kept` or `RecordingStudio.kept_sql`.
 9. Point Admin at `access_recording_resolver`. Delete `site_admin_recording_resolver`.
 10. Pin `puma` `8.1.0` and `msgpack` `>= 1.8.7` so Bundler Audit stays clean.
+11. On Root Switchable 0.16, grant Accessible `:view` on the current root before opening the switch page. The dummy default root is the first listed root the actor can view.
 
 ## 0.3.1 - 2026-11-14
 

@@ -41,6 +41,11 @@ class RecordingStudioTemplateTest < ActiveSupport::TestCase
     folder_recording = RecordingStudio::Recording.find_by!(recordable: folder)
     page_recording = RecordingStudio::Recording.find_by!(recordable: page)
 
+    admin = User.find_by!(email: "admin@admin.com")
+    [ root_recording, accessible_root_recording, private_root_recording ].each do |recording|
+      assert RecordingStudioAccessible.authorized?(actor: admin, recording: recording, role: :view)
+    end
+
     assert_nil Current.actor
     assert_nil root_recording.parent_recording_id
     assert_nil accessible_root_recording.parent_recording_id
@@ -57,6 +62,36 @@ class RecordingStudioTemplateTest < ActiveSupport::TestCase
       end
     end
     assert_nil Current.actor
+  ensure
+    Current.actor = nil
+  end
+
+  test "default root is the first listed root the actor can view" do
+    owner = User.create!(
+      email: "default-root-#{SecureRandom.hex(4)}@example.com",
+      password: "Password",
+      password_confirmation: "Password"
+    )
+    Current.actor = owner
+    hidden = Workspace.create!(name: "AAA Hidden #{SecureRandom.hex(4)}")
+    visible = Workspace.create!(name: "ZZZ Visible #{SecureRandom.hex(4)}")
+    hidden_root = RecordingStudio.create_root_recording!(hidden, actor: owner)
+    visible_root = RecordingStudio.create_root_recording!(visible, actor: owner)
+    result = RecordingStudioAccessible.bootstrap_owner_access!(recording: visible_root, actor: owner)
+    raise result.error if result.failure?
+    refute RecordingStudioAccessible.authorized?(actor: owner, recording: hidden_root, role: :view)
+
+    scope = RecordingStudioRootSwitchable.configuration.scopes.fetch("all_workspaces")
+    chosen = scope.default_root_for(roots: [ hidden_root, visible_root ], actor: owner)
+    assert_equal visible_root, chosen
+
+    stranger = User.create!(
+      email: "default-root-stranger-#{SecureRandom.hex(4)}@example.com",
+      password: "Password",
+      password_confirmation: "Password"
+    )
+    fallback = scope.default_root_for(roots: [ hidden_root, visible_root ], actor: stranger)
+    assert_equal hidden_root, fallback
   ensure
     Current.actor = nil
   end

@@ -33,8 +33,14 @@ RecordingStudioRootSwitchable.configure do |config|
     end
     scope.access_check = ->(**) { true }
 
-    scope.default_root = lambda do |roots:, **|
-      roots.first
+    # Root Switchable 0.16 forbids the switch page unless the actor can view
+    # the current root. Prefer the first listed root they can view. Otherwise
+    # keep the first root so the layout still has a selection.
+    scope.default_root = lambda do |roots:, actor: nil, **|
+      viewable = Array(roots).find do |root_recording|
+        RecordingStudioAccessible.authorized?(actor: actor, recording: root_recording, role: :view)
+      end
+      viewable || roots.first
     end
   end
 end

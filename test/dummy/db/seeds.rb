@@ -48,10 +48,14 @@ previous_actor = Current.actor
 Current.actor = user
 
 begin
-  # Create the root recording
+  # Create the root recording. Root Switchable 0.16 requires Accessible
+  # :view on the current root, which defaults to the first workspace.
   root_recording = RecordingStudio.create_root_recording!(workspace, actor: user)
   accessible_root_recording = RecordingStudio.create_root_recording!(accessible_workspace, actor: user)
   private_root_recording = RecordingStudio.create_root_recording!(private_workspace, actor: user)
+  ensure_owner.call(user, root_recording)
+  ensure_owner.call(user, accessible_root_recording)
+  ensure_owner.call(user, private_root_recording)
 
   folder_recording = find_or_record_child.call(folder, root_recording, root_recording)
 
